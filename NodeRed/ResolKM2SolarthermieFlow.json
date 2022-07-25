@@ -1,0 +1,498 @@
+[
+    {
+        "id": "3378cc9b0842516c",
+        "type": "tab",
+        "label": "Solar",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "0da30592f2ced035",
+        "type": "http request",
+        "z": "3378cc9b0842516c",
+        "name": "login",
+        "method": "POST",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "authType": "",
+        "senderr": false,
+        "x": 610,
+        "y": 100,
+        "wires": [
+            [
+                "a97585365a5620bb"
+            ]
+        ]
+    },
+    {
+        "id": "de5a2f25b7d971e7",
+        "type": "inject",
+        "z": "3378cc9b0842516c",
+        "name": "Init & 8 hours",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "28800",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payloadType": "date",
+        "x": 120,
+        "y": 100,
+        "wires": [
+            [
+                "0cee4f6610225440"
+            ]
+        ]
+    },
+    {
+        "id": "0cee4f6610225440",
+        "type": "change",
+        "z": "3378cc9b0842516c",
+        "name": "set variables",
+        "rules": [
+            {
+                "t": "set",
+                "p": "resol_IP",
+                "pt": "flow",
+                "to": "<enter your IP address here>",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "resol_username",
+                "pt": "flow",
+                "to": "admin",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "resol_password",
+                "pt": "flow",
+                "to": "<enter your pw here>",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 290,
+        "y": 100,
+        "wires": [
+            [
+                "e66ae8eb5c872fc5"
+            ]
+        ]
+    },
+    {
+        "id": "e66ae8eb5c872fc5",
+        "type": "function",
+        "z": "3378cc9b0842516c",
+        "name": "body & headers",
+        "func": "user = flow.get(\"resol_username\");\npw   = flow.get(\"resol_password\");\nip   = flow.get(\"resol_IP\");\nmsg.payload = `[{\n    \"id\": \"1\",\n    \"jsonrpc\": \"2.0\",\n    \"method\": \"login\",\n    \"params\": {\n        \"username\": \"${user}\",\n        \"password\": \"${pw}\"\n    }\n}]`;\nmsg.headers = {};\nmsg.headers['Content-Type'] = 'application/json';\nmsg.url = `http://${ip}/cgi-bin/resol-webservice`;\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 460,
+        "y": 100,
+        "wires": [
+            [
+                "0da30592f2ced035"
+            ]
+        ]
+    },
+    {
+        "id": "a97585365a5620bb",
+        "type": "function",
+        "z": "3378cc9b0842516c",
+        "name": "set authId",
+        "func": "\nauthId = msg.payload[0]['result']['authId'];\nflow.set(\"authId\", authId);\nnode.status(authId);\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 740,
+        "y": 100,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "e23c8e4032ed4615",
+        "type": "inject",
+        "z": "3378cc9b0842516c",
+        "name": "30s",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "30",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "0.5",
+        "topic": "",
+        "payloadType": "date",
+        "x": 90,
+        "y": 260,
+        "wires": [
+            [
+                "876a27f2a3b2931f"
+            ]
+        ]
+    },
+    {
+        "id": "876a27f2a3b2931f",
+        "type": "function",
+        "z": "3378cc9b0842516c",
+        "name": "body & headers",
+        "func": "authId = flow.get(\"authId\");\nip   = flow.get(\"resol_IP\");\nmsg.payload = `[{\n    \"id\": \"1\",\n    \"jsonrpc\": \"2.0\",\n    \"method\": \"dataGetCurrentData\",\n    \"params\": {\n        \"authId\": \"${authId}\"\n    }\n}]`;\nmsg.headers = {};\nmsg.headers['Content-Type'] = 'application/json';\nmsg.url = `http://${ip}/cgi-bin/resol-webservice`;\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 240,
+        "y": 260,
+        "wires": [
+            [
+                "d3d1dd3b8f871011"
+            ]
+        ]
+    },
+    {
+        "id": "d3d1dd3b8f871011",
+        "type": "http request",
+        "z": "3378cc9b0842516c",
+        "name": "dataGetCurrentData",
+        "method": "POST",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "authType": "",
+        "senderr": false,
+        "x": 440,
+        "y": 260,
+        "wires": [
+            [
+                "daa4f00cf330d591"
+            ]
+        ]
+    },
+    {
+        "id": "daa4f00cf330d591",
+        "type": "function",
+        "z": "3378cc9b0842516c",
+        "name": "process",
+        "func": "previousApiError = context.get(\"PreviousApiError\") || false;\nif (msg.statusCode != undefined) {\n    if (msg.statusCode != 200) {\n        if (!previousApiError) {\n            node.warn(`API Error: ${msg.payload.errorType} - ${msg.payload.message}`);\n            context.set(\"PreviousApiError\", true);\n            context.set(\"PreviousApiErrorMessage\", msg.payload.errorType);\n            context.set(\"PreviousApiErrorTime\", (new Date()).toLocaleString());\n            node.send({payload: `Resol API Error ${context.get(\"PreviousApiErrorMessage\")} occuring at ${context.get(\"PreviousApiErrorTime\")}`, topic: \"API Error\"})\n        }\n        node.status(`API Error: ${msg.payload.errorType}`);\n        return;\n    } else {\n        node.status(`API OK: ${msg.payload.errorType}`);\n        if (previousApiError) {\n            node.warn(`Recovered from previous API Error`);\n            context.set(\"PreviousApiError\", false);\n            node.send({payload: `Recovered from Resol API Error ${context.get(\"PreviousApiErrorMessage\")} occuring at ${context.get(\"PreviousApiErrorTime\")}`, topic: \"API Error Recovery\"})\n        }\n    }\n}\nif (msg.payload[0] == undefined || msg.payload[0].result == undefined) {\n    node.warn(\"Error: API call did not return data!\");\n    node.status(\"Error\");\n    return;\n}\nnode.status(`Success: ${msg.statusCode}`);\n\n\nvalueMap = [\n    {in: \"Temperature S1\",          out: \"Panel Ost\"},\n    {in: \"Temperature S2\",          out: \"Pufferspeicher unten\"},\n    {in: \"Temperature S3\",          out: \"Panel West\"},\n    {in: \"Temperature S4\",          out: \"S4\"},\n    {in: \"Pump speed relay 1\",      out: \"Pumpe Ost\"},\n    {in: \"Pump speed relay 2\",      out: \"Pumpe West\"},\n    {in: \"Error mask\",              out: \"Fehler Maske\"},\n    {in: \"Operating hours relay 1\", out: \"Betriebsstunden Ost\"},\n    {in: \"Operating hours relay 2\", out: \"Betriebsstunden West\"},\n    {in: \"Heat quantity\",           out: \"Wärmemenge\"},\n]\n\n//======= Helper Functions ===================\nerrorMap = [\n    {id: 1,     name: \"Sensor line broken\"},\n    {id: 2,     name: \"Sensor line short-circuited\"},\n    {id: 32,    name: \"Flow rate monitoring\"},\n    {id: 64,    name: \"Overpressure\"},\n    {id: 128,   name: \"Low pressure\"},\n    {id: 512,   name: \"Data memory\"},\n    {id: 1024,  name: \"Real-time clock\"},\n    {id: 4096,  name: \"Twin pump\"},\n]\nnoErr = {id: 0,  name: \"OK\"}\n\nconst getErrors = (errorMask) => {\n    errs = []\n    for (var e of errorMap) {\n        if ((errorMask & e.id) != 0) {\n            errs.push(e);\n        }\n    }\n    if (errs.length == 0) {\n        errs.push(noErr)\n    }\n    return errs;\n}\n\n\n//======= Main Logic ===================\nvar influxTemperatureValues = {};\nvar influxStatusValues = {};\nvar influxMiscValues = {};\nvar errorMaskValue = 0;\nvar errs = [];\nr = msg.payload[0].result\niHeader = 0\nfor (var header of r.headers) {\n    iField = 0\n    for (var field of r.headers[iHeader].fields) {\n        value = r.headersets[0].packets[iHeader].field_values[iField].raw_value\n        if (field.name == \"Error mask\") {\n            errorMaskValue = value;\n        }\n        map = valueMap.find((e) => e.in === field.name);\n        if (map != undefined) {\n            field.name = map.out\n        }\n        field.value = value;\n        //node.warn(`${field.name}: ${field.value}`);\n        if (field.unit == \" °C\") {\n            influxTemperatureValues[field.name] = field.value;\n        } else if (field.unit == \"%\") {\n            influxStatusValues[field.name] = field.value;\n        } else {\n            influxMiscValues[field.name] = field.value;\n            if (field.name == \"Fehler Maske\") {\n                errs = getErrors(field.value)\n            }\n        }\n        iField++\n    }\n    iHeader++\n}\npreviousError = context.get(\"PreviousError\") || false;\nif (errorMaskValue != 0) {\n    if (!previousError) {\n        node.warn(`Resol Error: ${errorMaskValue}`);\n        context.set(\"PreviousError\", true);\n        context.set(\"PreviousErrorMask\", errorMaskValue);\n        context.set(\"PreviousErrorTime\", (new Date()).toLocaleString());\n        node.send({payload: `Resol Error ${context.get(\"PreviousErrorMask\")} occuring at ${context.get(\"PreviousErrorTime\")}`, topic: \"Error\"})\n    }\n    node.status(`Error: ${errorMaskValue}`);\n    return;\n} else {\n    node.status(`OK: ${errorMaskValue}`);\n    if (previousError) {\n        node.warn(`Recovered from previous Error`);\n        context.set(\"PreviousError\", false);\n        node.send({payload: `Recovered from Resol Error ${context.get(\"PreviousErrorMask\")} occuring at ${context.get(\"PreviousErrorTime\")}`, topic: \"Error Recovery\"})\n    }\n}\n\nnode.send({payload: influxTemperatureValues, measurement: \"temperature\", topic: \"Influx\"});\nnode.send({payload: influxStatusValues,      measurement: \"status\",      topic: \"Influx\"});\nnode.send({payload: influxMiscValues,        measurement: \"misc\",        topic: \"Influx\"});\nfor (var e of errs) {\n    node.send({payload: e, measurement: \"err\", topic: \"InfluxErr\"});\n    //node.send({payload: [{\"id\": e.id}, {\"name\": e.name}], measurement: \"err\", topic: \"InfluxErr\"});\n}\nreturn",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 620,
+        "y": 260,
+        "wires": [
+            [
+                "c21fa689ed4407a1"
+            ]
+        ]
+    },
+    {
+        "id": "c21fa689ed4407a1",
+        "type": "switch",
+        "z": "3378cc9b0842516c",
+        "name": "Topic",
+        "property": "topic",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "Influx",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "API Error Recovery",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "API Error",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "Error Recovery",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "Error",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "InfluxErr",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 6,
+        "x": 750,
+        "y": 260,
+        "wires": [
+            [
+                "ec5eb35b9fe890e5"
+            ],
+            [
+                "0d3ee78356f91e6f"
+            ],
+            [
+                "f1208f7b6ada140a"
+            ],
+            [
+                "e0e42b23c470253d"
+            ],
+            [
+                "edb70428ea9323e1"
+            ],
+            [
+                "e52ee16486436264"
+            ]
+        ]
+    },
+    {
+        "id": "0d3ee78356f91e6f",
+        "type": "change",
+        "z": "3378cc9b0842516c",
+        "name": "Subject: API recovery ",
+        "rules": [
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "Fehler behoben beim Resol API Zugriff",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 960,
+        "y": 200,
+        "wires": [
+            [
+                "705b5e89696446e5"
+            ]
+        ]
+    },
+    {
+        "id": "705b5e89696446e5",
+        "type": "e-mail",
+        "z": "3378cc9b0842516c",
+        "server": "smtp.gmail.com",
+        "port": "465",
+        "secure": true,
+        "tls": false,
+        "name": "${EMAIL_TO}",
+        "dname": "Send email",
+        "output": false,
+        "outputs": 0,
+        "x": 1150,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "ec5eb35b9fe890e5",
+        "type": "influxdb out",
+        "z": "3378cc9b0842516c",
+        "influxdb": "f19cecb9d045fd47",
+        "name": "Influx",
+        "measurement": "",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "",
+        "precisionV18FluxV20": "ms",
+        "retentionPolicyV18Flux": "",
+        "org": "diskstation",
+        "bucket": "solar",
+        "x": 910,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "9b0997124bc29ba9",
+        "type": "comment",
+        "z": "3378cc9b0842516c",
+        "name": "At startup init variables and log in with user/pw to retrieve authId token - repeat every 8 hours to refresh token",
+        "info": "",
+        "x": 410,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "1679f1e14d4d4eeb",
+        "type": "comment",
+        "z": "3378cc9b0842516c",
+        "name": "Poll REST API to retrieve measurements and send them to Influxdb",
+        "info": "",
+        "x": 280,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "f1208f7b6ada140a",
+        "type": "change",
+        "z": "3378cc9b0842516c",
+        "name": "Subject: API error",
+        "rules": [
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "Fehler beim Resol API Zugriff",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 950,
+        "y": 240,
+        "wires": [
+            [
+                "705b5e89696446e5"
+            ]
+        ]
+    },
+    {
+        "id": "edb70428ea9323e1",
+        "type": "change",
+        "z": "3378cc9b0842516c",
+        "name": "Subject: error",
+        "rules": [
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "Fehler in Solarthermie",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 940,
+        "y": 320,
+        "wires": [
+            [
+                "705b5e89696446e5"
+            ]
+        ]
+    },
+    {
+        "id": "e52ee16486436264",
+        "type": "influxdb out",
+        "z": "3378cc9b0842516c",
+        "influxdb": "f19cecb9d045fd47",
+        "name": "InfluxErr",
+        "measurement": "",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "",
+        "precisionV18FluxV20": "ms",
+        "retentionPolicyV18Flux": "",
+        "org": "diskstation",
+        "bucket": "test",
+        "x": 920,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "e0e42b23c470253d",
+        "type": "change",
+        "z": "3378cc9b0842516c",
+        "name": "Subject: recovery ",
+        "rules": [
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "Fehler behoben in Solarthermie",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 950,
+        "y": 280,
+        "wires": [
+            [
+                "705b5e89696446e5"
+            ]
+        ]
+    },
+    {
+        "id": "f19cecb9d045fd47",
+        "type": "influxdb",
+        "hostname": "127.0.0.1",
+        "port": "8086",
+        "protocol": "http",
+        "database": "database",
+        "name": "Diskstation",
+        "usetls": false,
+        "tls": "dd7f76e99ee77dbc",
+        "influxdbVersion": "2.0",
+        "url": "http://192.168.1.142:8086",
+        "rejectUnauthorized": false
+    },
+    {
+        "id": "dd7f76e99ee77dbc",
+        "type": "tls-config",
+        "name": "",
+        "cert": "",
+        "key": "",
+        "ca": "",
+        "certname": "",
+        "keyname": "",
+        "caname": "",
+        "servername": "",
+        "verifyservercert": false,
+        "alpnprotocol": ""
+    }
+]
