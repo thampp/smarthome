@@ -1,0 +1,320 @@
+[
+    {
+        "id": "572c52f91233c61f",
+        "type": "tab",
+        "label": "PV Dashboard",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "193b648e59ab2586",
+        "type": "link in",
+        "z": "572c52f91233c61f",
+        "name": "LinkIn1",
+        "links": [
+            "cf5a00011dea2e3a",
+            "12131a5d364893cd"
+        ],
+        "x": 155,
+        "y": 140,
+        "wires": [
+            [
+                "4fe96394c79f6ae4"
+            ]
+        ]
+    },
+    {
+        "id": "4fe96394c79f6ae4",
+        "type": "change",
+        "z": "572c52f91233c61f",
+        "name": "mv value to payload",
+        "rules": [
+            {
+                "t": "move",
+                "p": "payload.attribute.id",
+                "pt": "msg",
+                "to": "id",
+                "tot": "msg"
+            },
+            {
+                "t": "move",
+                "p": "payload.attribute.value",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 300,
+        "y": 140,
+        "wires": [
+            [
+                "d121158b5299adb9"
+            ]
+        ]
+    },
+    {
+        "id": "d121158b5299adb9",
+        "type": "switch",
+        "z": "572c52f91233c61f",
+        "name": "",
+        "property": "id",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "287",
+                "vt": "num"
+            },
+            {
+                "t": "eq",
+                "v": "501",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "502",
+                "vt": "str"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 4,
+        "x": 470,
+        "y": 140,
+        "wires": [
+            [
+                "568759197fd87bab"
+            ],
+            [
+                "c61a337d4d58669d"
+            ],
+            [
+                "df5e7b7970e99e35"
+            ],
+            [
+                "d823010d70265aac"
+            ]
+        ]
+    },
+    {
+        "id": "568759197fd87bab",
+        "type": "ui_chart",
+        "z": "572c52f91233c61f",
+        "name": "",
+        "group": "91b33bec0186147c",
+        "order": 2,
+        "width": 20,
+        "height": 4,
+        "label": "Ladezustand Batterie %",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "100",
+        "removeOlder": "24",
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#53d110",
+            "#48c0e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#aebd71",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 810,
+        "y": 60,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "c67f16e333a1a92d",
+        "type": "ui_chart",
+        "z": "572c52f91233c61f",
+        "name": "",
+        "group": "91b33bec0186147c",
+        "order": 1,
+        "width": 20,
+        "height": 10,
+        "label": "kW Messwerte",
+        "chartType": "line",
+        "legend": "true",
+        "xformat": "HH:mm",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": "24",
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#3df5e9",
+            "#2e43fc",
+            "#000000",
+            "#2ca02c",
+            "#98df8a",
+            "#e9e107",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "x": 780,
+        "y": 240,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "c61a337d4d58669d",
+        "type": "ui_chart",
+        "z": "572c52f91233c61f",
+        "name": "",
+        "group": "91b33bec0186147c",
+        "order": 4,
+        "width": 20,
+        "height": 4,
+        "label": "Netzeinspeisung > 10 Minuten >1 kW ",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "1",
+        "removeOlder": "24",
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#2e43fd",
+            "#48c0e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#aebd71",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 850,
+        "y": 120,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "df5e7b7970e99e35",
+        "type": "ui_chart",
+        "z": "572c52f91233c61f",
+        "name": "",
+        "group": "91b33bec0186147c",
+        "order": 3,
+        "width": 20,
+        "height": 4,
+        "label": "PV Produktion > 10 Minuten > 1,5 kW",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "1",
+        "removeOlder": "24",
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#ecf005",
+            "#48c0e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#aebd71",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "x": 850,
+        "y": 180,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "d823010d70265aac",
+        "type": "function",
+        "z": "572c52f91233c61f",
+        "name": "round to kW",
+        "func": "var kW = msg.payload / 1000;\nmsg.payload = kW.toFixed(2);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 610,
+        "y": 240,
+        "wires": [
+            [
+                "c67f16e333a1a92d"
+            ]
+        ]
+    },
+    {
+        "id": "91b33bec0186147c",
+        "type": "ui_group",
+        "name": "PV Anlage",
+        "tab": "13b51603abbbf96f",
+        "order": 1,
+        "disp": true,
+        "width": "20",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "13b51603abbbf96f",
+        "type": "ui_tab",
+        "name": "PV Anlage",
+        "icon": "fa-sun-o",
+        "order": 1,
+        "disabled": false,
+        "hidden": false
+    }
+]

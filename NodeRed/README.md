@@ -12,6 +12,8 @@ You can adjust that to your heating by adding/removing the ones that the API sup
 You will also find the workaround for the fact that the Viessmann API does not report Pellets consuption values in the free API version:
 **Aktuellen Wert "Brennstoffverbrauch" aus ViCare App eintragen** With this node I added a NodeRed UI form that can be used to enter consuption values manually from time to time. The link to that UI form is part of the Grafana dashboard.
 
+The flow includes email notification upon API failures.
+
 Uses an Influx bucket "heating"
 ![image](https://user-images.githubusercontent.com/13353725/180771640-4393b578-98cd-488e-babd-abf5e20eba6d.png)
 
@@ -23,4 +25,18 @@ For starters you will have to enter your password and IP address in the **set va
 
 Uses an Influx bucket "solar"
 ![image](https://user-images.githubusercontent.com/13353725/180771444-3a998891-2a20-42f1-b5ab-070026d0c8f5.png)
+
+## PVFlow and PVDashboardFlow
+Uses the Fronium Symo APIs to fetch PV information and publish it to 
+- Virtual Homee in Homee devices
+- InfluxDB
+- A NodeRed Dashboard (deprecated - using Influx-Grafana now)
+
+Our house has 2 Wechselrichter so it's a bit more complex. 
+
+The flow  includes email notification upon API failures.
+
+For starters you will have to enter your IP adresses in the **http GET: WR1**  **http GET: WR2** nodes.
+
+Uses an Influx bucket "pv"
 

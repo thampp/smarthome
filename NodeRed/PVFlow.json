@@ -1,0 +1,1107 @@
+[
+    {
+        "id": "0433a169eeeeb549",
+        "type": "tab",
+        "label": "PV Anlage ",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "fc0e9704.8faa2",
+        "type": "homeeDevice",
+        "z": "0433a169eeeeb549",
+        "virtual-homee": "",
+        "name": "PV Anlage",
+        "nodeId": "281",
+        "showNodeId": true,
+        "profile": "38",
+        "icon": "nodeicon_energymeter",
+        "attributes": [
+            {
+                "instance": 0,
+                "minimum": 0,
+                "maximum": 10000,
+                "current_value": 0,
+                "target_value": 0,
+                "last_value": 0,
+                "unit": "text",
+                "step_value": 1,
+                "editable": 0,
+                "type": 84,
+                "state": 1,
+                "last_changed": 1572785482,
+                "changed_by": 1,
+                "changed_by_id": 0,
+                "based_on": 1,
+                "data": "SolarWeb",
+                "id": "280",
+                "node_id": "281"
+            },
+            {
+                "instance": 0,
+                "minimum": 0,
+                "maximum": 10000,
+                "current_value": 0,
+                "target_value": 0,
+                "last_value": 0,
+                "unit": "text",
+                "step_value": 1,
+                "editable": 0,
+                "type": 45,
+                "state": 1,
+                "last_changed": 1572785482,
+                "changed_by": 1,
+                "changed_by_id": 0,
+                "based_on": 1,
+                "data": "1.0.0",
+                "id": "281",
+                "node_id": "281"
+            },
+            {
+                "instance": 0,
+                "minimum": 0,
+                "maximum": 500000,
+                "current_value": 0,
+                "target_value": 0,
+                "last_value": 0,
+                "unit": "W",
+                "step_value": 100,
+                "editable": 0,
+                "type": 264,
+                "state": 1,
+                "last_changed": 1572785482,
+                "changed_by": 1,
+                "changed_by_id": 0,
+                "based_on": 4,
+                "data": "",
+                "id": "282",
+                "node_id": "281"
+            },
+            {
+                "instance": 0,
+                "minimum": 0,
+                "maximum": 500000,
+                "current_value": 0,
+                "target_value": 0,
+                "last_value": 0,
+                "unit": "W",
+                "step_value": 100,
+                "editable": 0,
+                "type": 265,
+                "state": 1,
+                "last_changed": 1572785482,
+                "changed_by": 1,
+                "changed_by_id": 0,
+                "based_on": 4,
+                "data": "",
+                "id": "283",
+                "node_id": "281"
+            },
+            {
+                "instance": 0,
+                "minimum": -50000,
+                "maximum": 50000,
+                "current_value": 0,
+                "target_value": 0,
+                "last_value": 0,
+                "unit": "W",
+                "step_value": 100,
+                "editable": 0,
+                "type": 267,
+                "state": 1,
+                "last_changed": 1572785482,
+                "changed_by": 1,
+                "changed_by_id": 0,
+                "based_on": 4,
+                "data": "",
+                "id": "284",
+                "node_id": "281"
+            },
+            {
+                "instance": 0,
+                "minimum": 0,
+                "maximum": 50000,
+                "current_value": 0,
+                "target_value": 0,
+                "last_value": 0,
+                "unit": "W",
+                "step_value": 100,
+                "editable": 0,
+                "type": 268,
+                "state": 1,
+                "last_changed": 1572785482,
+                "changed_by": 1,
+                "changed_by_id": 0,
+                "based_on": 4,
+                "data": "",
+                "id": "285",
+                "node_id": "281"
+            },
+            {
+                "instance": 0,
+                "minimum": 0,
+                "maximum": 50000,
+                "current_value": 0,
+                "target_value": 0,
+                "last_value": 0,
+                "unit": "W",
+                "step_value": 100,
+                "editable": 0,
+                "type": 269,
+                "state": 1,
+                "last_changed": 1572785482,
+                "changed_by": 1,
+                "changed_by_id": 0,
+                "based_on": 4,
+                "data": "",
+                "id": "286",
+                "node_id": "281"
+            },
+            {
+                "instance": 0,
+                "minimum": 0,
+                "maximum": 100,
+                "current_value": 0,
+                "target_value": 100,
+                "last_value": 0,
+                "unit": "%25",
+                "step_value": 1,
+                "editable": 0,
+                "type": 273,
+                "state": 1,
+                "last_changed": 1572785482,
+                "changed_by": 1,
+                "changed_by_id": 0,
+                "based_on": 4,
+                "data": "",
+                "id": "287",
+                "node_id": "281"
+            },
+            {
+                "instance": 0,
+                "minimum": -50000,
+                "maximum": 20000,
+                "current_value": 0,
+                "target_value": 0,
+                "last_value": 0,
+                "unit": "W",
+                "step_value": 100,
+                "editable": 0,
+                "type": 266,
+                "state": 1,
+                "last_changed": 1572785663,
+                "changed_by": 1,
+                "changed_by_id": 0,
+                "based_on": 4,
+                "data": "",
+                "id": "288",
+                "node_id": "281"
+            },
+            {
+                "instance": 0,
+                "minimum": 0,
+                "maximum": 9999999,
+                "current_value": 0,
+                "target_value": 0,
+                "last_value": 0,
+                "unit": "kWh",
+                "step_value": 1,
+                "editable": 0,
+                "type": 274,
+                "state": 6,
+                "last_changed": 1572785482,
+                "changed_by": 1,
+                "changed_by_id": 0,
+                "based_on": 4,
+                "data": "",
+                "id": "289",
+                "node_id": "281"
+            },
+            {
+                "instance": 0,
+                "minimum": 0,
+                "maximum": 9999999,
+                "current_value": 0,
+                "target_value": 0,
+                "last_value": 0,
+                "unit": "kWh",
+                "step_value": 1,
+                "editable": 0,
+                "type": 275,
+                "state": 6,
+                "last_changed": 1572785482,
+                "changed_by": 1,
+                "changed_by_id": 0,
+                "based_on": 4,
+                "data": "",
+                "id": "290",
+                "node_id": "281"
+            },
+            {
+                "instance": 0,
+                "minimum": 0,
+                "maximum": 9999999,
+                "current_value": 0,
+                "target_value": 0,
+                "last_value": 0,
+                "unit": "kWh",
+                "step_value": 1,
+                "editable": 0,
+                "type": 276,
+                "state": 6,
+                "last_changed": 1572785482,
+                "changed_by": 1,
+                "changed_by_id": 0,
+                "based_on": 4,
+                "data": "",
+                "id": "291",
+                "node_id": "281"
+            },
+            {
+                "instance": 0,
+                "minimum": 0,
+                "maximum": 9999999,
+                "current_value": 0,
+                "target_value": 0,
+                "last_value": 0,
+                "unit": "kWh",
+                "step_value": 1,
+                "editable": 0,
+                "type": 277,
+                "state": 6,
+                "last_changed": 1572785482,
+                "changed_by": 1,
+                "changed_by_id": 0,
+                "based_on": 4,
+                "data": "",
+                "id": "292",
+                "node_id": "281"
+            },
+            {
+                "instance": 0,
+                "minimum": 0,
+                "maximum": 9999999,
+                "current_value": 0,
+                "target_value": 0,
+                "last_value": 0,
+                "unit": "kWh",
+                "step_value": 1,
+                "editable": 0,
+                "type": 278,
+                "state": 6,
+                "last_changed": 1572785482,
+                "changed_by": 1,
+                "changed_by_id": 0,
+                "based_on": 4,
+                "data": "",
+                "id": "293",
+                "node_id": "281"
+            },
+            {
+                "instance": 0,
+                "minimum": 0,
+                "maximum": 9999999,
+                "current_value": 0,
+                "target_value": 0,
+                "last_value": 0,
+                "unit": "kWh",
+                "step_value": 1,
+                "editable": 0,
+                "type": 279,
+                "state": 6,
+                "last_changed": 1572785482,
+                "changed_by": 1,
+                "changed_by_id": 0,
+                "based_on": 4,
+                "data": "",
+                "id": "294",
+                "node_id": "281"
+            }
+        ],
+        "statusTemplate": "PV:{{#288.current_value}} Ve:{{#284.current_value}} Netz:+{{#282.current_value}}-{{#283.current_value}} B:+{{#285.current_value}}-{{#286.current_value}} {{#287.current_value}}%",
+        "x": 1060,
+        "y": 180,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "8b002189.381e18",
+        "type": "http request",
+        "z": "0433a169eeeeb549",
+        "name": "http GET: WR1",
+        "method": "GET",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "http://192.168.1.181/solar_api/v1/GetPowerFlowRealtimeData.fcgi",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "authType": "",
+        "senderr": false,
+        "x": 200,
+        "y": 200,
+        "wires": [
+            [
+                "6e6dad224fd0e067"
+            ]
+        ]
+    },
+    {
+        "id": "96afb158.510388",
+        "type": "inject",
+        "z": "0433a169eeeeb549",
+        "name": "20 sec",
+        "props": [],
+        "repeat": "20",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payloadType": "str",
+        "x": 100,
+        "y": 280,
+        "wires": [
+            [
+                "8b002189.381e18",
+                "44288263b8fed681"
+            ]
+        ]
+    },
+    {
+        "id": "44288263b8fed681",
+        "type": "http request",
+        "z": "0433a169eeeeb549",
+        "name": "http GET: WR2",
+        "method": "GET",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "http://192.168.1.91/solar_api/v1/GetPowerFlowRealtimeData.fcgi",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "authType": "",
+        "senderr": false,
+        "x": 200,
+        "y": 420,
+        "wires": [
+            [
+                "b0d45d2c2c586701"
+            ]
+        ]
+    },
+    {
+        "id": "b0d45d2c2c586701",
+        "type": "function",
+        "z": "0433a169eeeeb549",
+        "name": "Set variable P_PV_WR2",
+        "func": "// the production of the WR2 is communicated\n// the main logic via the flow variable P_PV_WR2\n\n// we use msg.topic to communicate with email sending\n// be default we don't need it\nmsg.topic = undefined;\n\n// Unlike WR1 our WR2 is not reliably available\nif (!msg.payload.Body) {\n    //node.warn(\"called with empty Body\")\n    node.status(\"HTTP Error\")\n    flow.set(\"P_PV_WR2\", 0);\n    context.set(\"P_PV_WR2_Error\", true);\n    return msg;\n}\n\nvar P_PV_WR2 = msg.payload.Body.Data.Site.P_PV || 0;\nflow.set(\"P_PV_WR2\", P_PV_WR2);\nnode.status(`P_PV_WR2: ${P_PV_WR2}`);\n\nif (context.get(\"P_PV_WR2_Error\") == true) {\n    node.warn(\"Recovered from last error.\");\n    var errorOccurenceTime = new Date(flow.get(\"P_PV_WR2_Error_Time\"));\n    var errorOccurenceTimeString = errorOccurenceTime.toLocaleString(\"de-DE\", { timeZone: 'CET' });\n    var errorRecoveryTime = new Date();\n    var errorRecoveryTimeString = new Date().toLocaleString(\"de-DE\", { timeZone: 'CET' });\n    var errorRecoveryDuration = new Date(errorRecoveryTime - errorOccurenceTime);\n    var errorRecoveryDurationString = errorRecoveryDuration.toLocaleTimeString(\"de-DE\");\n    var errorMessage = flow.get(\"P_PV_WR2_Error_Message\");\n    // the payload will become the email body\n    msg.payload = `Recovered from last error: \"${errorMessage}\" after ${errorRecoveryDurationString}. Error occurred initially at: ${errorOccurenceTimeString} and recovered at: ${errorRecoveryTimeString}`;\n    // the presence of this topic will be used to decide if the error recovery email is to be sent\n    msg.topic = \"Error Recovery\";\n    // unset our variables for clarity (no more error state needed)\n    flow.set(\"P_PV_WR2_Error_Time\", undefined);\n    flow.set(\"P_PV_WR2_Error_Message\", undefined)\n}\ncontext.set(\"P_PV_WR2_Error\", false);\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 450,
+        "y": 420,
+        "wires": [
+            [
+                "3d89d6591d11f6aa"
+            ]
+        ]
+    },
+    {
+        "id": "7a8bbdab9f65141c",
+        "type": "comment",
+        "z": "0433a169eeeeb549",
+        "name": "Wechselrichter 2",
+        "info": "",
+        "x": 200,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "f2d6265d11862cbf",
+        "type": "comment",
+        "z": "0433a169eeeeb549",
+        "name": "Wechselrichter 1",
+        "info": "",
+        "x": 200,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "b7015219e13faa39",
+        "type": "comment",
+        "z": "0433a169eeeeb549",
+        "name": "Compute values",
+        "info": "",
+        "x": 420,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "dd56af778f946018",
+        "type": "comment",
+        "z": "0433a169eeeeb549",
+        "name": "Value change?",
+        "info": "",
+        "x": 940,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "dbd82a67a354d931",
+        "type": "function",
+        "z": "0433a169eeeeb549",
+        "name": "Rolling Avgs",
+        "func": "// remove blanks so we can use as context variable name\nconst postfix = msg.topic.replace(/ +/g, '_');\nconst bufferVarName = \"buffer_\" + postfix;\nconst totalVarName = 'total_' + postfix;\n\nconst rollingAvgMinutes = msg.rollingAvgMinutes || 1;\n// rolling avg time window in millisecs\nconst range = rollingAvgMinutes * 60 * 1000;   \nconst now = new Date();\nconst valueIn = Number(msg.payload.attribute.value)\nvar removed = false;\n\n// get last values from context (or init when needed)\nvar buffer = context.get(bufferVarName) || [];\nvar total = context.get(totalVarName) || 0;   // the accumulated total so far\n\n// remove any samples that are too old\nwhile (buffer[0] && buffer[0].timestamp < (now - range)) {\n    // remove oldest sample from array and total\n    total -= buffer[0].value;\n    buffer.shift();\n    removed = true;\n}\n// add the new sample to the end\nbuffer.push({timestamp: now, value: valueIn});\ntotal += valueIn;\n\n// store in context for next iteration\ncontext.set(bufferVarName, buffer);\ncontext.set(totalVarName, total);\n\nvar valueOut = Math.round(total/buffer.length);\nmsg.payload.attribute.value = valueOut;\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 630,
+        "y": 200,
+        "wires": [
+            [
+                "dec7ac99900b628a"
+            ]
+        ]
+    },
+    {
+        "id": "d83c14d345d76288",
+        "type": "homeeDevice",
+        "z": "0433a169eeeeb549",
+        "virtual-homee": "",
+        "name": "PV Excess Energy",
+        "nodeId": "501",
+        "showNodeId": true,
+        "profile": "10",
+        "icon": "nodeicon_sun",
+        "attributes": [
+            {
+                "type": 1,
+                "state": 1,
+                "instance": 0,
+                "minimum": 0,
+                "maximum": 1,
+                "current_value": 0,
+                "target_value": 0,
+                "last_value": 0,
+                "data": "",
+                "name": "",
+                "unit": "",
+                "step_value": 1,
+                "editable": 1,
+                "last_changed": 1629636667,
+                "changed_by": 1,
+                "changed_by_id": 0,
+                "based_on": 1,
+                "options": [],
+                "id": "501",
+                "node_id": "501"
+            }
+        ],
+        "statusTemplate": "",
+        "x": 1090,
+        "y": 320,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "adf28adfa030cc88",
+        "type": "rbe",
+        "z": "0433a169eeeeb549",
+        "name": "",
+        "func": "rbe",
+        "gap": "2%",
+        "start": "",
+        "inout": "out",
+        "septopics": true,
+        "property": "payload.attribute.value",
+        "topi": "topic",
+        "x": 910,
+        "y": 380,
+        "wires": [
+            [
+                "6c775c88b8acf6a8"
+            ]
+        ]
+    },
+    {
+        "id": "f3b481acc8509765",
+        "type": "function",
+        "z": "0433a169eeeeb549",
+        "name": "Available Energy",
+        "func": "const THRESHOLD = 1500;\n\nvar tmp = {\n    \"attribute\": {\n        \"id\": 502,\n        \"value\": msg.payload.attribute.value > THRESHOLD ? 1 : 0\n    }\n};\n\nmsg[\"payload\"] = tmp;\nnode.status(`Threshold: ${THRESHOLD} Available energy: ${msg.payload.attribute.value}`);\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 760,
+        "y": 380,
+        "wires": [
+            [
+                "adf28adfa030cc88",
+                "cf5a00011dea2e3a"
+            ]
+        ]
+    },
+    {
+        "id": "7dfe44b371744450",
+        "type": "comment",
+        "z": "0433a169eeeeb549",
+        "name": ">1.5 kW production for more than 10 minutes rolling average -> Available Energy",
+        "info": "",
+        "x": 960,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "9ef56f700a76d9ca",
+        "type": "function",
+        "z": "0433a169eeeeb549",
+        "name": "Excess Energy",
+        "func": "const THRESHOLD = 1000;\n\nvar tmp = {\n    \"attribute\": {\n        \"id\": 501,\n        \"value\": msg.payload.attribute.value > THRESHOLD ? 1 : 0\n    }\n};\n\nmsg[\"payload\"] = tmp;\nnode.status(`Threshold: ${THRESHOLD} Excess energy: ${msg.payload.attribute.value}`);\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 760,
+        "y": 320,
+        "wires": [
+            [
+                "b92a9013e3e7635b",
+                "cf5a00011dea2e3a"
+            ]
+        ]
+    },
+    {
+        "id": "b92a9013e3e7635b",
+        "type": "rbe",
+        "z": "0433a169eeeeb549",
+        "name": "",
+        "func": "rbe",
+        "gap": "2%",
+        "start": "",
+        "inout": "out",
+        "septopics": true,
+        "property": "payload.attribute.value",
+        "topi": "topic",
+        "x": 910,
+        "y": 320,
+        "wires": [
+            [
+                "d83c14d345d76288"
+            ]
+        ]
+    },
+    {
+        "id": "6c775c88b8acf6a8",
+        "type": "homeeDevice",
+        "z": "0433a169eeeeb549",
+        "virtual-homee": "",
+        "name": "PV Available Energy",
+        "nodeId": "502",
+        "showNodeId": true,
+        "profile": "10",
+        "icon": "nodeicon_sun",
+        "attributes": [
+            {
+                "type": 1,
+                "state": 1,
+                "instance": 0,
+                "minimum": 0,
+                "maximum": 1,
+                "current_value": 0,
+                "target_value": 0,
+                "last_value": 0,
+                "data": "",
+                "name": "",
+                "unit": "",
+                "step_value": 1,
+                "editable": 1,
+                "last_changed": 1629636667,
+                "changed_by": 1,
+                "changed_by_id": 0,
+                "based_on": 1,
+                "options": [],
+                "id": "502",
+                "node_id": "502"
+            }
+        ],
+        "statusTemplate": "",
+        "x": 1090,
+        "y": 380,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "4f03445b7cd741f6",
+        "type": "comment",
+        "z": "0433a169eeeeb549",
+        "name": ">1 kW grid feed for more than 10 minutes rolling average -> Excess Energy",
+        "info": "",
+        "x": 940,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "cf5a00011dea2e3a",
+        "type": "link out",
+        "z": "0433a169eeeeb549",
+        "name": "LinkOut to dashboard",
+        "links": [
+            "193b648e59ab2586"
+        ],
+        "x": 995,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "8f9def5a67c35601",
+        "type": "function",
+        "z": "0433a169eeeeb549",
+        "name": "Values -> Msgs",
+        "func": "var outputMsgs = [];\n\nfunction addAttributeMessage(topic, id, value, rollingAvgMinutes=1, ignoreValuesLessThan=30) {\n    value = value || 0;\n    // values less then 30 Watt are set to zero\n    var adjustedValue = value < ignoreValuesLessThan ? 0 : value;\n     var tmpMsg = { \n        \"payload\": {\n            \"attribute\": {\n                \"id\": id,\n                \"value\": adjustedValue\n            }\n        }\n    };\n    tmpMsg.topic = topic;\n    tmpMsg.rollingAvgMinutes = rollingAvgMinutes;\n    outputMsgs.push(tmpMsg);\n}\n\n// Unlike WR1 is not reliably available\nif (!msg.payload.Body) {\n    //node.warn(\"called with empty Body\")\n    node.status(\"HTTP Error\")\n    flow.set(\"P_PV_WR1\", 0);\n    context.set(\"P_PV_WR1_Error\", true);\n    return outputMsgs;\n}\ncontext.set(\"P_PV_WR1_Error\", false);\n\n// extract measurement values from HTTP response\nvar batt = msg.payload.Body.Data.Site.P_Akku || 0; \nvar battPct = msg.payload.Body.Data.Inverters['1'].SOC || 0;\nvar grid = msg.payload.Body.Data.Site.P_Grid || 0;\nvar pvProduction1 = msg.payload.Body.Data.Site.P_PV || 0;\nvar pvProduction2 = flow.get(\"P_PV_WR2\") || 0;\nvar pv = pvProduction1 + pvProduction2\nvar consumption = pv + grid + batt;\n\n// create one message for each measurement \naddAttributeMessage(\"Netz Bezug\", 282, grid);\naddAttributeMessage(\"Netz Einspeisung\", 283, grid * -1);\naddAttributeMessage(\"Verbrauch\", 284, consumption);\naddAttributeMessage(\"Batterie Entladung\", 285, batt);\naddAttributeMessage(\"Batterie Ladung\", 286, batt * -1);\naddAttributeMessage(\"Batterie\", 287, battPct, 1, 0);\naddAttributeMessage(\"PV Produktion\", 288, pv);\n\nnode.status(`PV:${pv.toFixed(0)} Ve:${consumption.toFixed(0)} Netz:${grid.toFixed(0)} B:${batt.toFixed(0)} ${battPct.toFixed(0)}%`);\n\n// create messages for indicator devices\naddAttributeMessage(\"Netz Einspeisung Langzeit\", 501, grid * -1, 20);\naddAttributeMessage(\"PV Produktion Langzeit\", 502, pvProduction1+pvProduction2, 20);\n\n//put all messages into one for Influx\nvar influxValues = {};\nfor (var m of outputMsgs) {\n    // first send out non-Influx event for nodered dashboard\n    //node.send(m);\n    // now construct Influx events\n    influxValues[m.topic] = m.payload.attribute.value;\n}\nnode.send({payload: influxValues, measurement: \"kw\", topic: \"Influx\"});\n\nreturn [ outputMsgs ];\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 420,
+        "y": 200,
+        "wires": [
+            [
+                "2ca896f7ae257562"
+            ]
+        ]
+    },
+    {
+        "id": "6e6dad224fd0e067",
+        "type": "delay",
+        "z": "0433a169eeeeb549",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "50",
+        "timeoutUnits": "milliseconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 290,
+        "y": 260,
+        "wires": [
+            [
+                "8f9def5a67c35601"
+            ]
+        ]
+    },
+    {
+        "id": "dec7ac99900b628a",
+        "type": "switch",
+        "z": "0433a169eeeeb549",
+        "name": "",
+        "property": "msg.payload.attribute.id",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "btwn",
+                "v": "200",
+                "vt": "num",
+                "v2": "299",
+                "v2t": "num"
+            },
+            {
+                "t": "eq",
+                "v": "501",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "502",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 3,
+        "x": 770,
+        "y": 200,
+        "wires": [
+            [
+                "cf5a00011dea2e3a",
+                "fc0e9704.8faa2"
+            ],
+            [
+                "9ef56f700a76d9ca"
+            ],
+            [
+                "f3b481acc8509765"
+            ]
+        ]
+    },
+    {
+        "id": "adb6ebf6660bf673",
+        "type": "comment",
+        "z": "0433a169eeeeb549",
+        "name": "Store WR 2 PV in context",
+        "info": "",
+        "x": 450,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "de1591b005f87ba6",
+        "type": "comment",
+        "z": "0433a169eeeeb549",
+        "name": "Wait for WR2 PV",
+        "info": "",
+        "x": 300,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "0ed06cb4dab6f01d",
+        "type": "comment",
+        "z": "0433a169eeeeb549",
+        "name": "Smooth vals",
+        "info": "",
+        "x": 630,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "18a4011c87f7ed3f",
+        "type": "catch",
+        "z": "0433a169eeeeb549",
+        "name": "catch http errors",
+        "scope": [
+            "8b002189.381e18",
+            "44288263b8fed681"
+        ],
+        "uncaught": false,
+        "x": 200,
+        "y": 600,
+        "wires": [
+            [
+                "5d92a77f6b34946b"
+            ]
+        ]
+    },
+    {
+        "id": "f5a5c6ba9983f3a3",
+        "type": "debug",
+        "z": "0433a169eeeeb549",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "error.message",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 550,
+        "y": 640,
+        "wires": []
+    },
+    {
+        "id": "5d92a77f6b34946b",
+        "type": "rbe",
+        "z": "0433a169eeeeb549",
+        "name": "new error?",
+        "func": "rbe",
+        "gap": "",
+        "start": "",
+        "inout": "out",
+        "septopics": true,
+        "property": "error",
+        "topi": "error.source.id",
+        "x": 370,
+        "y": 600,
+        "wires": [
+            [
+                "f5a5c6ba9983f3a3",
+                "618ecf4164057449"
+            ]
+        ]
+    },
+    {
+        "id": "cc5c0ee96a4e3568",
+        "type": "e-mail",
+        "z": "0433a169eeeeb549",
+        "server": "smtp.gmail.com",
+        "port": "465",
+        "secure": true,
+        "tls": false,
+        "name": "${EMAIL_TO}",
+        "dname": "Send email",
+        "output": false,
+        "outputs": 0,
+        "x": 1030,
+        "y": 600,
+        "wires": []
+    },
+    {
+        "id": "618ecf4164057449",
+        "type": "change",
+        "z": "0433a169eeeeb549",
+        "name": "Set email body & vars",
+        "rules": [
+            {
+                "t": "move",
+                "p": "error.message",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "P_PV_WR2_Error_Message",
+                "pt": "flow",
+                "to": "payload",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "P_PV_WR2_Error_Time",
+                "pt": "flow",
+                "to": "",
+                "tot": "date"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 560,
+        "y": 600,
+        "wires": [
+            [
+                "f791e45f0bd2e1c0"
+            ]
+        ]
+    },
+    {
+        "id": "f791e45f0bd2e1c0",
+        "type": "change",
+        "z": "0433a169eeeeb549",
+        "d": true,
+        "name": "Set email subject",
+        "rules": [
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "Fehler beim API Zugriff Wechselrichter",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 790,
+        "y": 600,
+        "wires": [
+            [
+                "cc5c0ee96a4e3568"
+            ]
+        ]
+    },
+    {
+        "id": "3d89d6591d11f6aa",
+        "type": "switch",
+        "z": "0433a169eeeeb549",
+        "name": "Error recovered?",
+        "property": "topic",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "Error Recovery",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 550,
+        "y": 560,
+        "wires": [
+            [
+                "a33c8c5993291f70"
+            ]
+        ]
+    },
+    {
+        "id": "aaa62fb8e1d86536",
+        "type": "inject",
+        "z": "0433a169eeeeb549",
+        "name": "Test Email",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            },
+            {
+                "p": "from",
+                "v": "from@test.com",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "Test Subject !",
+        "payload": "Test Body !",
+        "payloadType": "str",
+        "x": 820,
+        "y": 640,
+        "wires": [
+            [
+                "cc5c0ee96a4e3568"
+            ]
+        ]
+    },
+    {
+        "id": "a33c8c5993291f70",
+        "type": "change",
+        "z": "0433a169eeeeb549",
+        "name": "Set email subject",
+        "rules": [
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "Fehler behoben beim API Zugriff Wechselrichter",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 790,
+        "y": 560,
+        "wires": [
+            [
+                "cc5c0ee96a4e3568"
+            ]
+        ]
+    },
+    {
+        "id": "88cdfd3f18e58837",
+        "type": "comment",
+        "z": "0433a169eeeeb549",
+        "name": "Fronius Anlage mit 2 Symo Wechselrichtern (GEN24 10.0 & 6.0-3-M) und zwei Pseudo-Schaltern um Geräte einzuschalten wenn ausreichend Leistung verfügbar ist",
+        "info": "",
+        "x": 560,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "ad215552f5083304",
+        "type": "comment",
+        "z": "0433a169eeeeb549",
+        "name": "Send email upon http error & recovery",
+        "info": "",
+        "x": 270,
+        "y": 560,
+        "wires": []
+    },
+    {
+        "id": "2ca896f7ae257562",
+        "type": "switch",
+        "z": "0433a169eeeeb549",
+        "name": "",
+        "property": "topic",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "Influx",
+                "vt": "str"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 530,
+        "y": 100,
+        "wires": [
+            [
+                "734f56a42fe95687"
+            ],
+            [
+                "dbd82a67a354d931"
+            ]
+        ]
+    },
+    {
+        "id": "734f56a42fe95687",
+        "type": "influxdb out",
+        "z": "0433a169eeeeb549",
+        "influxdb": "f19cecb9d045fd47",
+        "name": "Influx",
+        "measurement": "kw",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "",
+        "precisionV18FluxV20": "ms",
+        "retentionPolicyV18Flux": "",
+        "org": "diskstation",
+        "bucket": "pv",
+        "x": 650,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "f19cecb9d045fd47",
+        "type": "influxdb",
+        "hostname": "127.0.0.1",
+        "port": "8086",
+        "protocol": "http",
+        "database": "database",
+        "name": "Diskstation",
+        "usetls": false,
+        "tls": "dd7f76e99ee77dbc",
+        "influxdbVersion": "2.0",
+        "url": "http://192.168.1.142:8086",
+        "rejectUnauthorized": false
+    },
+    {
+        "id": "dd7f76e99ee77dbc",
+        "type": "tls-config",
+        "name": "",
+        "cert": "",
+        "key": "",
+        "ca": "",
+        "certname": "",
+        "keyname": "",
+        "caname": "",
+        "servername": "",
+        "verifyservercert": false,
+        "alpnprotocol": ""
+    }
+]
