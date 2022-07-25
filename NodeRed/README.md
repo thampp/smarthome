@@ -13,6 +13,7 @@ You will also find the workaround for the fact that the Viessmann API does not r
 **Aktuellen Wert "Brennstoffverbrauch" aus ViCare App eintragen** With this node I added a NodeRed UI form that can be used to enter consuption values manually from time to time. The link to that UI form is part of the Grafana dashboard.
 
 Uses an Influx bucket "heating"
+![image](https://user-images.githubusercontent.com/13353725/180771640-4393b578-98cd-488e-babd-abf5e20eba6d.png)
 
 
 ## ResolKM2SolarthermieFlow
@@ -21,5 +22,5 @@ Uses the Resol APIs to fetch Solarthermie information and publish it to InfluxDB
 For starters you will have to enter your password and IP address in the **set variables** node
 
 Uses an Influx bucket "solar"
-
+![image](https://user-images.githubusercontent.com/13353725/180771444-3a998891-2a20-42f1-b5ab-070026d0c8f5.png)
 
