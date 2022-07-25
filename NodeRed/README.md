@@ -10,7 +10,7 @@ of the many metrics the Viessmann API can return are retrieved, what their name,
 You can adjust that to your heating by adding/removing the ones that the API supports for your heating.
 
 You will also find the workaround for the fact that the Viessmann API does not report Pellets consuption values in the free API version:
-**Aktuellen Wert "Brennstoffverbrauch" aus ViCare App eintragen** With this node I added a NodeRed UI form that can be used to enter consuption values manually from time to time. The link to that UI form is part of the Grafana dashboard.
+**Aktuellen Wert "Brennstoffverbrauch" aus ViCare App eintragen** With this node I added a NodeRed UI form that can be used to enter consuption values manually from time to time. One can look them up in the VCare app. The link to that UI form is part of the Grafana dashboard.
 
 The flow includes email notification upon API failures.
 
