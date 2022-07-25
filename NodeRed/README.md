@@ -17,7 +17,9 @@ Uses an Influx bucket "heating"
 
 ## ResolKM2SolarthermieFlow
 Uses the Resol APIs to fetch Solarthermie information and publish it to InfluxDB.
+
 For starters you will have to enter your password and IP address in the **set variables** node
+
 Uses an Influx bucket "solar"
 
 
