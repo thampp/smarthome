@@ -1,0 +1,1005 @@
+[
+    {
+        "id": "eb3f132b.f55c48",
+        "type": "tab",
+        "label": "Heizung",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "8e64bcb1.3a6198",
+        "type": "function",
+        "z": "eb3f132b.f55c48",
+        "name": "payload & headers",
+        "func": "clientId = flow.get(\"clientID\",\"diskOnly\");\nrefreshToken = flow.get(\"refreshToken\",\"diskOnly\");\nmsg.payload = `grant_type=refresh_token&client_id=${clientId}&refresh_token=${refreshToken}`;\nmsg.headers = {};\nmsg.headers['Content-Type'] = 'application/x-www-form-urlencoded';\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 370,
+        "y": 200,
+        "wires": [
+            [
+                "8eed9ce.e975a6"
+            ]
+        ]
+    },
+    {
+        "id": "2f0fb613.30912a",
+        "type": "inject",
+        "z": "eb3f132b.f55c48",
+        "name": "Refresh Access Token",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "3540",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "",
+        "topic": "",
+        "payloadType": "date",
+        "x": 150,
+        "y": 200,
+        "wires": [
+            [
+                "8e64bcb1.3a6198"
+            ]
+        ]
+    },
+    {
+        "id": "8eed9ce.e975a6",
+        "type": "http request",
+        "z": "eb3f132b.f55c48",
+        "name": "refreshtoken",
+        "method": "POST",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "https://iam.viessmann.com/idp/v2/token",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "authType": "",
+        "x": 590,
+        "y": 200,
+        "wires": [
+            [
+                "6bb697b00c5166b2",
+                "e84f7cbb1b0b7099"
+            ]
+        ]
+    },
+    {
+        "id": "caf45d2a.5b914",
+        "type": "function",
+        "z": "eb3f132b.f55c48",
+        "name": "Extract Token",
+        "func": "msg.payload=msg.payload.access_token;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 880,
+        "y": 200,
+        "wires": [
+            [
+                "b330b072.f48968",
+                "c3ada136dbadfccf"
+            ]
+        ]
+    },
+    {
+        "id": "b330b072.f48968",
+        "type": "change",
+        "z": "eb3f132b.f55c48",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "#:(diskOnly)::accessToken",
+                "pt": "flow",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1100,
+        "y": 200,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "38e707c4905717f1",
+        "type": "inject",
+        "z": "eb3f132b.f55c48",
+        "name": "Init once",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payloadType": "date",
+        "x": 100,
+        "y": 80,
+        "wires": [
+            [
+                "85a8f3b384feeae2"
+            ]
+        ]
+    },
+    {
+        "id": "85a8f3b384feeae2",
+        "type": "change",
+        "z": "eb3f132b.f55c48",
+        "name": "Set initial access token and IDs",
+        "rules": [
+            {
+                "t": "set",
+                "p": "#:(diskOnly)::accessToken",
+                "pt": "flow",
+                "to": "enter your inital access token",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "#:(diskOnly)::refreshToken",
+                "pt": "flow",
+                "to": "enter your inital refresh token",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "#:(diskOnly)::deviceID",
+                "pt": "flow",
+                "to": "0",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "#:(diskOnly)::installationID",
+                "pt": "flow",
+                "to": "enter your installation id",
+                "tot": "num"
+            },
+            {
+                "t": "set",
+                "p": "#:(diskOnly)::gatewaySerial",
+                "pt": "flow",
+                "to": "enter your gatway serial",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "#:(diskOnly)::clientID",
+                "pt": "flow",
+                "to": "enter your client id",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 330,
+        "y": 80,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "28ce4ad9.56b3ee",
+        "type": "inject",
+        "z": "eb3f132b.f55c48",
+        "name": "Feature List",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payloadType": "date",
+        "x": 110,
+        "y": 640,
+        "wires": [
+            [
+                "efd9bd12.35253"
+            ]
+        ]
+    },
+    {
+        "id": "7c34263e.a7791",
+        "type": "http request",
+        "z": "eb3f132b.f55c48",
+        "name": "Read Feature List",
+        "method": "GET",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "https://api.viessmann.com/iot/v1/equipment/installations/{{installationID}}/gateways/{{gatewaySerial}}/devices/{{deviceId}}/features",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "authType": "",
+        "senderr": false,
+        "x": 510,
+        "y": 640,
+        "wires": [
+            [
+                "92f53cc2.4ba79"
+            ]
+        ]
+    },
+    {
+        "id": "efd9bd12.35253",
+        "type": "function",
+        "z": "eb3f132b.f55c48",
+        "name": "payload & headers",
+        "func": "var atoken = flow.get('accessToken',\"diskOnly\")\nmsg.headers = {\n    Authorization: \"Bearer \"+ atoken\n}\nmsg.installationID = flow.get('installationID',\"diskOnly\");\nmsg.gatewaySerial = flow.get('gatewaySerial',\"diskOnly\");\nmsg.deviceId = flow.get('deviceID',\"diskOnly\");\nreturn msg;\n\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 290,
+        "y": 640,
+        "wires": [
+            [
+                "7c34263e.a7791"
+            ]
+        ]
+    },
+    {
+        "id": "92f53cc2.4ba79",
+        "type": "debug",
+        "z": "eb3f132b.f55c48",
+        "name": "Feature List (JSON)",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 740,
+        "y": 640,
+        "wires": []
+    },
+    {
+        "id": "619f461a.3caf38",
+        "type": "http request",
+        "z": "eb3f132b.f55c48",
+        "name": "Read Feature",
+        "method": "GET",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "https://api.viessmann-platform.io/iot/v1/equipment/installations/{{installationID}}/gateways/{{gatewaySerial}}/devices/0/features/heating.boiler.sensors.temperature.main",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "authType": "",
+        "senderr": false,
+        "x": 500,
+        "y": 740,
+        "wires": [
+            [
+                "996c1677.deb32"
+            ]
+        ]
+    },
+    {
+        "id": "996c1677.deb32",
+        "type": "debug",
+        "z": "eb3f132b.f55c48",
+        "name": "Example",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 720,
+        "y": 740,
+        "wires": []
+    },
+    {
+        "id": "954542bb.556178",
+        "type": "function",
+        "z": "eb3f132b.f55c48",
+        "name": "payload & headers",
+        "func": "var atoken = flow.get('accessToken',\"diskOnly\")\nmsg.headers = {\n    Authorization: \"Bearer \"+ atoken\n}\nmsg.installationID = flow.get('installationID',\"diskOnly\");\nmsg.gatewaySerial = flow.get('gatewaySerial',\"diskOnly\");\nmsg.deviceId = flow.get('deviceID',\"diskOnly\");\nreturn msg;\n\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 290,
+        "y": 740,
+        "wires": [
+            [
+                "619f461a.3caf38"
+            ]
+        ]
+    },
+    {
+        "id": "8ab5e8c0.40a968",
+        "type": "inject",
+        "z": "eb3f132b.f55c48",
+        "name": "Single Feature",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payloadType": "date",
+        "x": 110,
+        "y": 740,
+        "wires": [
+            [
+                "954542bb.556178"
+            ]
+        ]
+    },
+    {
+        "id": "3b411a444c07a3fc",
+        "type": "inject",
+        "z": "eb3f132b.f55c48",
+        "name": "Fetch Features",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "120",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "1",
+        "topic": "",
+        "payloadType": "date",
+        "x": 120,
+        "y": 340,
+        "wires": [
+            [
+                "9191bd6bfb41bfda"
+            ]
+        ]
+    },
+    {
+        "id": "9191bd6bfb41bfda",
+        "type": "function",
+        "z": "eb3f132b.f55c48",
+        "name": "payload & headers",
+        "func": "var atoken = flow.get('accessToken',\"diskOnly\");\nmsg.headers = {\n    Authorization: \"Bearer \"+ atoken\n}\nmsg.installationID = flow.get('installationID',\"diskOnly\");\nmsg.gatewaySerial = flow.get('gatewaySerial',\"diskOnly\");\nmsg.deviceId = flow.get('deviceID',\"diskOnly\");\n/*\nsplit = 1000\nnode.warn(atoken.substring(0,split));\nnode.warn(atoken.substring(split,split*2));\nnode.warn(atoken.substring(split*2));\n*/\nreturn msg;\n\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 310,
+        "y": 340,
+        "wires": [
+            [
+                "fd8e965fbbbaaf2f"
+            ]
+        ]
+    },
+    {
+        "id": "fd8e965fbbbaaf2f",
+        "type": "http request",
+        "z": "eb3f132b.f55c48",
+        "name": "Read Features",
+        "method": "GET",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "https://api.viessmann.com/iot/v1/equipment/installations/{{installationID}}/gateways/{{gatewaySerial}}/devices/{{deviceId}}/features",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "authType": "",
+        "senderr": false,
+        "x": 500,
+        "y": 340,
+        "wires": [
+            [
+                "f74dcd20af478def",
+                "58b3b9b37cb26174"
+            ]
+        ]
+    },
+    {
+        "id": "f74dcd20af478def",
+        "type": "function",
+        "z": "eb3f132b.f55c48",
+        "name": "Extract Values",
+        "func": "//======= Data Definitions ===================\nfeaturesToFetch = [\n    {name: \"Temperatur Kessel-Ist\",     id: \"heating.boiler.sensors.temperature.main\", metric: \"℃\"},\n    {name: \"Temperatur Kessel-Soll\",    id: \"heating.boiler.temperature\", metric: \"℃\"},\n    {name: \"Temperatur Puffer Oben\",  id: \"heating.buffer.sensors.temperature.top\", metric: \"℃\"},\n    //{name: \"heating.burners.0\", id: \"heating.burners.0\"},\n    {name: \"Brenner Betriebstunden\",    id: \"heating.burners.0.statistics\", subid: \".hours\",  val: \"properties.hours.value\", metric: \"Stunden\"},\n    {name: \"Brenner Starts\",            id: \"heating.burners.0.statistics\", subid: \".starts\", val: \"properties.starts.value\", metric: \"Starts\"},\n    //{name: \"heating.circuits\", id: \"heating.circuits\"},\n    //{name: \"heating.circuits.0\", id: \"heating.circuits.0\"},\n    {name: \"Heizkreis Umwälzpumpe\", id: \"heating.circuits.0.circulation.pump\", val: \"properties.status.value\", metric: \"Status\"},\n    {name: \"Vorlauftemperatur\", id: \"heating.circuits.0.sensors.temperature.supply\", metric: \"℃\"},\n    //{name: \"heating.circuits.0.dhw.pumps.circulation.schedule\", id: \"heating.circuits.0.dhw.pumps.circulation.schedule\"},\n    //{name: \"heating.circuits.0.dhw.schedule\", id: \"heating.circuits.0.dhw.schedule\"},\n    {name: \"Frostschutz\", id: \"heating.circuits.0.frostprotection\", val: \"properties.status.value\", metric: \"Status\"},\n    //{name: \"heating.circuits.0.heating.curve\", id: \"heating.circuits.0.heating.curve\"},\n    //{name: \"RoomInfluenceFactor\", id: \"heating.circuits.0.heating.roomInfluenceFactor\", metric: \"Integer\"},\n    //{name: \"heating.circuits.0.heating.schedule\", id: \"heating.circuits.0.heating.schedule\"},\n    //{name: \"Name\", id: \"heating.circuits.0.name\", val: \"properties.name.value\"},\n    {name: \"Modus\", id: \"heating.circuits.0.operating.modes.active\", metric: \"String\"},\n    /*\n    {name: \"heating.circuits.0.operating.modes.dhw\", id: \"heating.circuits.0.operating.modes.dhw\", val: \"properties.active.value\"},\n    {name: \"heating.circuits.0.operating.modes.dhwAndHeating\", id: \"heating.circuits.0.operating.modes.dhwAndHeating\", val: \"properties.active.value\"},\n    {name: \"heating.circuits.0.operating.modes.standby\", id: \"heating.circuits.0.operating.modes.standby\", val: \"properties.active.value\"},\n    //{name: \"heating.circuits.0.operating.modes.heating\", id: \"heating.circuits.0.operating.modes.heating\", val: \"properties.active.value\"},\n    */\n    {name: \"Programm\", id: \"heating.circuits.0.operating.programs.active\", metric: \"String\"},\n    /*\n    {name: \"heating.circuits.0.operating.programs.comfort\", id: \"heating.circuits.0.operating.programs.comfort\", val: \"properties.active.value\"},\n    {name: \"heating.circuits.0.operating.programs.eco\", id: \"heating.circuits.0.operating.programs.eco\", val: \"properties.active.value\"},\n    {name: \"heating.circuits.0.operating.programs.external\", id: \"heating.circuits.0.operating.programs.external\", val: \"properties.active.value\"},\n    //{name: \"heating.circuits.0.operating.programs.holiday\", id: \"heating.circuits.0.operating.programs.holiday\", val: \"properties.active.value\"},\n    {name: \"heating.circuits.0.operating.programs.normal\", id: \"heating.circuits.0.operating.programs.normal\", val: \"properties.active.value\"},\n    {name: \"heating.circuits.0.operating.programs.reduced\", id: \"heating.circuits.0.operating.programs.reduced\", val: \"properties.active.value\"},\n    {name: \"heating.circuits.0.operating.programs.standby\", id: \"heating.circuits.0.operating.programs.standby\", val: \"properties.active.value\"},\n    {name: \"heating.operating.programs.holiday\", id: \"heating.operating.programs.holiday\", val: \"properties.active.value\"},\n    */\n    //{name: \"heating.circuits.0.sensors.temperature.room\", id: \"heating.circuits.0.sensors.temperature.room\"},\n    /*\n    //{name: \"heating.circuits.1\", id: \"heating.circuits.1\"},\n    //{name: \"heating.circuits.1.circulation.pump\", id: \"heating.circuits.1.circulation.pump\"},\n    //{name: \"heating.circuits.1.dhw.pumps.circulation.schedule\", id: \"heating.circuits.1.dhw.pumps.circulation.schedule\"},\n    //{name: \"heating.circuits.1.dhw.schedule\", id: \"heating.circuits.1.dhw.schedule\"},\n    //{name: \"heating.circuits.1.frostprotection\", id: \"heating.circuits.1.frostprotection\"},\n    //{name: \"heating.circuits.1.heating.curve\", id: \"heating.circuits.1.heating.curve\"},\n    //{name: \"heating.circuits.1.heating.roomInfluenceFactor\", id: \"heating.circuits.1.heating.roomInfluenceFactor\"},\n    //{name: \"heating.circuits.1.heating.schedule\", id: \"heating.circuits.1.heating.schedule\"},\n    {name: \"heating.circuits.1.name\", id: \"heating.circuits.1.name\", val: \"properties.name.value\"},\n    //{name: \"heating.circuits.1.operating.modes.active\", id: \"heating.circuits.1.operating.modes.active\"},\n    //{name: \"heating.circuits.1.operating.modes.dhw\", id: \"heating.circuits.1.operating.modes.dhw\"},\n    //{name: \"heating.circuits.1.operating.modes.dhwAndHeating\", id: \"heating.circuits.1.operating.modes.dhwAndHeating\"},\n    {name: \"heating.circuits.1.operating.modes.heating\", id: \"heating.circuits.1.operating.modes.heating\"},\n    {name: \"heating.circuits.1.operating.modes.standby\", id: \"heating.circuits.1.operating.modes.standby\"},\n    {name: \"heating.circuits.1.operating.programs.active\", id: \"heating.circuits.1.operating.programs.active\"},\n    {name: \"heating.circuits.1.operating.programs.comfort\", id: \"heating.circuits.1.operating.programs.comfort\"},\n    {name: \"heating.circuits.1.operating.programs.eco\", id: \"heating.circuits.1.operating.programs.eco\"},\n    {name: \"heating.circuits.1.operating.programs.external\", id: \"heating.circuits.1.operating.programs.external\"},\n    {name: \"heating.circuits.1.operating.programs.holiday\", id: \"heating.circuits.1.operating.programs.holiday\"},\n    {name: \"heating.circuits.1.operating.programs.normal\", id: \"heating.circuits.1.operating.programs.normal\"},\n    {name: \"heating.circuits.1.operating.programs.reduced\", id: \"heating.circuits.1.operating.programs.reduced\"},\n    {name: \"heating.circuits.1.operating.programs.standby\", id: \"heating.circuits.1.operating.programs.standby\"},\n    {name: \"heating.circuits.1.sensors.temperature.room\", id: \"heating.circuits.1.sensors.temperature.room\"},\n    //{name: \"heating.circuits.1.sensors.temperature.supply\", id: \"heating.circuits.1.sensors.temperature.supply\"},\n    */\n    //{name: \"Konfiguration für Mehrfamilienhaus\", id: \"heating.configuration.multiFamilyHouse\", val: \"properties.active.value\"},\n    //{name: \"Zeit Offset\", id: \"heating.device.time.offset\"},\n    //{name: \"Warmwasser Status\", id: \"heating.dhw\", val: \"properties.active.value\", metric: \"Boolean\"},\n    {name: \"Warmwasser Status\", id: \"heating.dhw\", val: \"properties.status.value\", metric: \"Status\"},\n    {name: \"Warmwasser Aktiv\", id: \"heating.dhw.charging\", val: \"properties.active.value\", metric: \"Status\"},\n    {name: \"Warmwasser Zirkulationspumpe\", id: \"heating.dhw.pumps.circulation\", val: \"properties.status.value\", metric: \"Status\"},\n    //{name: \"heating.dhw.pumps.circulation.schedule\", id: \"heating.dhw.pumps.circulation.schedule\"},\n    {name: \"Warmwasser Speicherladepumpe\", id: \"heating.dhw.pumps.primary\", val: \"properties.status.value\", metric: \"Status\"},\n    //{name: \"heating.dhw.schedule\", id: \"heating.dhw.schedule\"},\n    {name: \"Warmwasser Speicher Temperatur\", id: \"heating.dhw.sensors.temperature.hotWaterStorage\", metric: \"℃\"},\n    {name: \"Warmwasser Soll-Temperatur\", id: \"heating.dhw.temperature.main\", metric: \"℃\"},\n    {name: \"Aussentemperatur\", id: \"heating.sensors.temperature.outside\", metric: \"℃\"}\n    /*\n    {name: \"heating.solar\", id: \"heating.solar\"}\n    {name: \"heating.solar.pumps.circuit\", id: \"heating.solar.pumps.circuit\"},\n    {name: \"heating.solar.sensors.temperature.collector\", id: \"heating.solar.sensors.temperature.collector\"},\n    {name: \"heating.solar.sensors.temperature.dhw\", id: \"heating.solar.sensors.temperature.dhw\"}\n    */\n]\n\n\nvaluesPrograms = [\n    {num: 0, id: \"normal\",    name: \"Normal\"},\n    {num: 1, id: \"reduced\",   name: \"Reduziert\"},\n    {num: 2, id: \"manual\",    name: \"Manuell\"},\n    {num: 3, id: \"standby\",   name: \"Standby\"},\n    {num: 4, id: \"external\",  name: \"Extern\"},\n    {num: 5, id: \"comfort\",   name: \"Komfort\"},\n    {num: 6, id: \"eco\",       name: \"Eco\"},\n    {num: 7, id: \"fixed\",     name: \"Fixed\"},\n    {num: 8, id: \"holiday\",   name: \"Urlaub\"},\n    {num: 9, id: \"holidayAtHome\", name: \"Urlaub zu Hause\"},\n    {num:10, id: \"forcedLastFromSchedule\", name: \"ForcedLastFromSchedule\"}\n];\n\nvaluesModes = [\n    {num: 0, id: \"dhwAndHeating\", name: \"Heizung & Warmwasser\"},\n    {num: 1, id: \"heating\",       name: \"Nur Heizung\"},\n    {num: 2, id: \"dhw\",           name: \"Nur Warmwasser\"},\n    {num: 3, id: \"forcedReduced\", name: \"Manuell Reduziert\"},\n    {num: 4, id: \"forcedNormal\",  name: \"Manuell Normal\"}\n];\n//normalStandby, standby\n\n//======= Helper Functions ===================\nconst getValueEntry = (valueArray, valueId) => {\n    idx = valueArray.findIndex((valueEntry) => valueEntry.id === valueId);\n    if (idx == undefined) {\n        node.warn(`Unkown value ${valueId}`);\n        return {num: -1, id: valueId,  name: valueId};\n    } else {\n        return valueArray[idx];\n    }\n}\n\nconst getFeatureValue = (featureArray, featureId, valuePath) => {\n    var fValue = \"no value found\";\n    idx = featureArray.findIndex((element) => element.feature === featureId );\n    if (idx == -1) {\n        node.warn(`Unkown feature ${featureId}`)\n        return fValue;\n    }\n    var val = 'properties.value.value';\n    if (valuePath != undefined) {\n        val = valuePath;\n    }\n    if (getPropStr(featureArray[idx], val) != undefined) {\n        fValue = getPropStr(featureArray[idx], val);\n    }\n    return fValue;\n}\n\nconst getPropStr = (object, spath) => {\n    path = spath.toString().split('.');\n    return getProp(object, path);\n}\nconst getProp = (object, path) => {\n    //node.warn(path);\n    if (path.length === 1) {\n        //node.warn(\"len 1\");\n        return object[path[0]];\n    } else if (path.length === 0) {\n        //node.warn(\"err\");\n        throw error;\n    } else {\n        if (object[path[0]]) {\n            //node.warn(\"recurse\");\n            return getProp(object[path[0]], path.slice(1));\n        } else {\n            //node.warn(\"recurse empty\");\n            object[path[0]] = {};\n            return getProp(object[path[0]], path.slice(1));\n      }\n    }\n};\n\n//======= BEGIN code ===================\nvar msgArray = [];\npreviousError = context.get(\"PreviousError\") || false;\nif (msg.statusCode != undefined) {\n    if (msg.statusCode != 200) {\n        if (!previousError) {\n            node.warn(`API Error: ${msg.payload.errorType} - ${msg.payload.message}`);\n            context.set(\"PreviousError\", true);\n            context.set(\"PreviousErrorMessage\", msg.payload.errorType);\n            context.set(\"PreviousErrorTime\", (new Date()).toLocaleString());\n        }\n        node.status(`Error: ${msg.payload.errorType}`);\n        return;\n    } else {\n        node.status(`OK: ${msg.payload.errorType}`);\n        if (previousError) {\n            node.warn(`Recovered from previous API Error`);\n            context.set(\"PreviousError\", false);\n            node.send({payload: `Recovered from Viessman API Error ${context.get(\"PreviousErrorMessage\")} occuring at ${context.get(\"PreviousErrorTime\")}`, topic: \"Error Recovery\"})\n        }\n    }\n}\nif (msg.payload.data == undefined) {\n    node.warn(\"Error: API call did not return data!\");\n    node.status(\"Error\");\n    return;\n}\nnode.status(`Success: ${msg.statusCode}`);\nfeatureArray=msg.payload.data;\nfor (var f of featuresToFetch) {\n    fValue = getFeatureValue(featureArray, f.id, f.val)\n    var id = f.id;\n    if (f.subid != undefined) {\n        id = id + f.subid;\n    }\n    \n    switch (id) {\n        case \"heating.burners.0.statistics.starts\":\n            lastStarts = context.get(\"lastStarts\",\"diskOnly\");\n            if (lastStarts == undefined) {\n                context.set(\"lastStarts\", fValue, \"diskOnly\");    \n                lastStarts = fValue;\n                node.warn(`Initializing lastStarts to: ${lastStarts}`);\n            }\n            restarted = fValue > lastStarts;\n            msgArray.push({payload: restarted , topic: \"Brenner gestartet\", id: \"burner.started\", metric: \"Status\"});\n            if (restarted) {\n                context.set(\"lastStarts\", fValue, \"diskOnly\");        \n            }\n        break;\n      case \"heating.circuits.0.operating.programs.active\":\n            valEntry = getValueEntry(valuesPrograms, fValue);\n            fValue = valEntry.name;\n            msgArray.push({payload: valEntry.num , topic: \"Aktives Programm (num)\", id: \"heating.circuits.0.operating.programs.active.num\", metric: \"Enum\", label: valEntry.name});\n        break;\n      case 'heating.circuits.0.operating.modes.active':\n            valEntry = getValueEntry(valuesModes, fValue);\n            fValue = valEntry.name;\n            msgArray.push({payload: valEntry.num , topic: \"Aktiver Modus (num)\", id: \"heating.circuits.0.operating.modes.active.num\", metric: \"Enum\", label: valEntry.name});\n        break;\n      //default:\n    }\n    msgArray.push({payload: fValue , topic: f.name, id: id, metric: f.metric || \"\", label: f.name})\n}\n\nactiveProgram = getFeatureValue(featureArray, \"heating.circuits.0.operating.programs.active\");\ntargetTemperature = -1;\nif (activeProgram != \"no value found\") {\n    targetTemperature = getFeatureValue(featureArray, `heating.circuits.0.operating.programs.${activeProgram}`, \"properties.temperature.value\");\n    if (targetTemperature != \"no value found\" && targetTemperature > 3) {\n        msgArray.push({payload: targetTemperature , topic: \"Ziel Temperatur\", id: \"heating.circuits.0.targetTemperature\", metric: \"℃\", label: f.name});\n    }\n}\n\n\n//put all messages into one for Influx\nvar influxTemperatureValues = {};\nvar influxStatusValues = {};\nvar influxMiscValues = {};\nfor (var m of msgArray) {\n    // first send out non-Influx event for nodered dashboard\n    node.send(m);\n    // now construct Influx events\n    if (m.metric == \"℃\") {\n        influxTemperatureValues[m.id] = m.payload;\n    } else if (m.metric == \"Status\" || m.metric == \"Enum\") {\n        if (m.metric == \"Status\") {\n            if (m.payload == 1 || m.payload == \"on\" || m.payload == true) {\n                m.payload = 1;\n            } else {\n                m.payload = 0;\n            }\n        }\n        influxStatusValues[m.id] = m.payload;\n    } else {\n        influxMiscValues[m.id] = m.payload;\n    }\n}\nnode.send({payload: influxTemperatureValues, measurement: \"temperature\", topic: \"Influx\"});\nnode.send({payload: influxStatusValues,      measurement: \"status\",      topic: \"Influx\"});\nnode.send({payload: influxMiscValues,        measurement: \"misc\",        topic: \"Influx\"});\nif (targetTemperature == \"no value found\") {\n    targetTemperature = \"_\"    \n}\nnode.status(`Prog: ${activeProgram} (${targetTemperature} ℃)`);\n\nreturn;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 700,
+        "y": 340,
+        "wires": [
+            [
+                "2201e24f6af0d408",
+                "b36030f5ecd53adb"
+            ]
+        ]
+    },
+    {
+        "id": "2201e24f6af0d408",
+        "type": "debug",
+        "z": "eb3f132b.f55c48",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 870,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "c3ada136dbadfccf",
+        "type": "function",
+        "z": "eb3f132b.f55c48",
+        "d": true,
+        "name": "Print Access Token (Bearer)",
+        "func": "split = 1000\nnode.warn(msg.payload.substring(0,split));\nnode.warn(msg.payload.substring(split,split*2));\nnode.warn(msg.payload.substring(split*2));\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1080,
+        "y": 140,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "58b3b9b37cb26174",
+        "type": "debug",
+        "z": "eb3f132b.f55c48",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 670,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "b36030f5ecd53adb",
+        "type": "switch",
+        "z": "eb3f132b.f55c48",
+        "name": "Error recovered or other?",
+        "property": "topic",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "Error Recovery",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "Influx",
+                "vt": "str"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 3,
+        "x": 930,
+        "y": 340,
+        "wires": [
+            [
+                "31960e0c20128a8e"
+            ],
+            [
+                "b07debce8ca77ec0"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "d372970499d29d22",
+        "type": "e-mail",
+        "z": "eb3f132b.f55c48",
+        "server": "smtp.gmail.com",
+        "port": "465",
+        "secure": true,
+        "tls": false,
+        "name": "${EMAIL_TO}",
+        "dname": "Send email",
+        "output": false,
+        "outputs": 0,
+        "x": 1070,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "a2954288c33783e9",
+        "type": "inject",
+        "z": "eb3f132b.f55c48",
+        "name": "Test Email",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            },
+            {
+                "p": "from",
+                "v": "from@test.com",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "Test Subject !",
+        "payload": "Test Body !",
+        "payloadType": "str",
+        "x": 880,
+        "y": 400,
+        "wires": [
+            [
+                "31960e0c20128a8e"
+            ]
+        ]
+    },
+    {
+        "id": "31960e0c20128a8e",
+        "type": "change",
+        "z": "eb3f132b.f55c48",
+        "name": "Set subject",
+        "rules": [
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "Fehler behoben beim Viessmann API Zugriff",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1050,
+        "y": 400,
+        "wires": [
+            [
+                "d372970499d29d22"
+            ]
+        ]
+    },
+    {
+        "id": "a5e543c5fc193246",
+        "type": "comment",
+        "z": "eb3f132b.f55c48",
+        "name": "Only needed for initial bootstrapping before the 1st refresh run to set variables",
+        "info": "",
+        "x": 290,
+        "y": 20,
+        "wires": []
+    },
+    {
+        "id": "2d4ce532afc7d4df",
+        "type": "comment",
+        "z": "eb3f132b.f55c48",
+        "name": "Refresh access token on startup & once per hour",
+        "info": "",
+        "x": 200,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "333dbde14bbcc45e",
+        "type": "comment",
+        "z": "eb3f132b.f55c48",
+        "name": "Fetch features and send to dashboard every 2 minutes (to stay well below daily free API limit)",
+        "info": "",
+        "x": 340,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "cd0e3cb2e8974a7b",
+        "type": "comment",
+        "z": "eb3f132b.f55c48",
+        "name": "Tool: Get feature list to see what information is available for this heating system",
+        "info": "",
+        "x": 300,
+        "y": 600,
+        "wires": []
+    },
+    {
+        "id": "cafb8fa972041ca4",
+        "type": "comment",
+        "z": "eb3f132b.f55c48",
+        "name": "Sample: Fetch an individual feature",
+        "info": "",
+        "x": 160,
+        "y": 700,
+        "wires": []
+    },
+    {
+        "id": "6bb697b00c5166b2",
+        "type": "debug",
+        "z": "eb3f132b.f55c48",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 670,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "e84f7cbb1b0b7099",
+        "type": "switch",
+        "z": "eb3f132b.f55c48",
+        "name": "Error?",
+        "property": "payload.access_token",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "null"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 730,
+        "y": 200,
+        "wires": [
+            [
+                "dc968fe9f7c9c265"
+            ],
+            [
+                "caf45d2a.5b914"
+            ]
+        ]
+    },
+    {
+        "id": "dc968fe9f7c9c265",
+        "type": "debug",
+        "z": "eb3f132b.f55c48",
+        "name": "Error!",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 850,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "2650c1e1be288f60",
+        "type": "comment",
+        "z": "eb3f132b.f55c48",
+        "name": "Tokens are stored in context storage \"diskOnly\" (see this comment for details)",
+        "info": "Edit settings.js in your nodeRed base directory.\nSearch for the section \"contextStorage\" and add a section like this if you don't have one yet:\n\n> diskOnly: {\n>       module: \"localfilesystem\"\n> }\n\nThis will make sure the tokens are still there after a node red restart",
+        "x": 750,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "b07debce8ca77ec0",
+        "type": "influxdb out",
+        "z": "eb3f132b.f55c48",
+        "influxdb": "f19cecb9d045fd47",
+        "name": "Influx",
+        "measurement": "",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "",
+        "precisionV18FluxV20": "ms",
+        "retentionPolicyV18Flux": "",
+        "org": "diskstation",
+        "bucket": "heating",
+        "x": 1110,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "ac7ae8b61132dac8",
+        "type": "influxdb out",
+        "z": "eb3f132b.f55c48",
+        "influxdb": "f19cecb9d045fd47",
+        "name": "Influx",
+        "measurement": "misc",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "",
+        "precisionV18FluxV20": "ms",
+        "retentionPolicyV18Flux": "",
+        "org": "diskstation",
+        "bucket": "heating",
+        "x": 1050,
+        "y": 560,
+        "wires": []
+    },
+    {
+        "id": "16707b481b9244fe",
+        "type": "ui_form",
+        "z": "eb3f132b.f55c48",
+        "name": "",
+        "label": "Aktuellen Wert \"Brennstoffverbrauch\" aus ViCare App eintragen",
+        "group": "6273405c4ab5353a",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "options": [
+            {
+                "label": "kg",
+                "value": "pellets",
+                "type": "number",
+                "required": true,
+                "rows": null
+            }
+        ],
+        "formValue": {
+            "pellets": ""
+        },
+        "payload": "",
+        "submit": "submit",
+        "cancel": "",
+        "topic": "topic",
+        "topicType": "msg",
+        "splitLayout": "",
+        "className": "",
+        "x": 270,
+        "y": 540,
+        "wires": [
+            [
+                "cf9e9fac27bef54d"
+            ]
+        ]
+    },
+    {
+        "id": "cf9e9fac27bef54d",
+        "type": "function",
+        "z": "eb3f132b.f55c48",
+        "name": "push current consumption",
+        "func": "lastPellets = flow.get(\"lastPellets\",\"diskOnly\");\nstatusOk = false;\nif (lastPellets == undefined) {\n    statusString = `Pellets NOT updated to ${msg.payload.pellets}! (Last pellets was UNDEFINED)`;\n} else if (msg.payload.pellets == undefined) {\n    statusString = `Pellets NOT updated to undefined value! (Last pellets was: ${lastPellets})`;\n} else if (msg.payload.pellets > (lastPellets + 100)) {\n    statusString = `Pellets NOT updated to ${msg.payload.pellets}! Inplausible high increase (Last pellets was : ${lastPellets})`;\n} else if (msg.payload.pellets < lastPellets) {\n    statusString = `Pellets NOT updated to ${msg.payload.pellets}! New value must be higher than last (Last pellets was: ${lastPellets})`;\n} else {\n    statusOk = true;\n}\nif (statusOk) {\n    // send to Influx\n    node.send({payload: {\"pellets.consumption\": msg.payload.pellets}, topic: \"Influx\"});\n    // send as last value to input form\n    node.send({payload: msg.payload, topic: \"Inputform\"});\n    // save as last value\n    flow.set(\"lastPellets\", msg.payload.pellets, \"diskOnly\");\n    statusString = `Pellets updated to ${msg.payload.pellets} (Last pellets was: ${lastPellets})`;\n    \n} else {\n    // send last pellets value back to input form\n    msg.payload.pellets = lastPellets;\n    node.send({payload: msg.payload, topic: \"Inputform\"});\n}\nnode.status(statusString)\nnode.send({payload: statusString, topic: \"Status\"});\n\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 660,
+        "y": 540,
+        "wires": [
+            [
+                "a48f07f2beacf8a4"
+            ]
+        ]
+    },
+    {
+        "id": "92e98b419f989735",
+        "type": "ui_text",
+        "z": "eb3f132b.f55c48",
+        "group": "6273405c4ab5353a",
+        "order": 2,
+        "width": 6,
+        "height": 2,
+        "name": "",
+        "label": "Status",
+        "format": "{{msg.payload}}",
+        "layout": "col-center",
+        "className": "",
+        "x": 1050,
+        "y": 520,
+        "wires": []
+    },
+    {
+        "id": "a48f07f2beacf8a4",
+        "type": "switch",
+        "z": "eb3f132b.f55c48",
+        "name": "",
+        "property": "topic",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "Inputform",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "Status",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "Influx",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 3,
+        "x": 870,
+        "y": 540,
+        "wires": [
+            [
+                "16707b481b9244fe"
+            ],
+            [
+                "92e98b419f989735"
+            ],
+            [
+                "ac7ae8b61132dac8"
+            ]
+        ]
+    },
+    {
+        "id": "102991c655d7caa2",
+        "type": "inject",
+        "z": "eb3f132b.f55c48",
+        "d": true,
+        "name": "Force update pellets to 90180",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "90180",
+        "payloadType": "num",
+        "x": 160,
+        "y": 480,
+        "wires": [
+            [
+                "41bb234056ee684c"
+            ]
+        ]
+    },
+    {
+        "id": "41bb234056ee684c",
+        "type": "function",
+        "z": "eb3f132b.f55c48",
+        "d": true,
+        "name": "push current consumption",
+        "func": "flow.set(\"lastPellets\", 90180, \"diskOnly\");\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 420,
+        "y": 480,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "f19cecb9d045fd47",
+        "type": "influxdb",
+        "hostname": "127.0.0.1",
+        "port": "8086",
+        "protocol": "http",
+        "database": "database",
+        "name": "Diskstation",
+        "usetls": false,
+        "tls": "dd7f76e99ee77dbc",
+        "influxdbVersion": "2.0",
+        "url": "http://192.168.1.142:8086",
+        "rejectUnauthorized": false
+    },
+    {
+        "id": "6273405c4ab5353a",
+        "type": "ui_group",
+        "name": "Pellets Verbrauch",
+        "tab": "0f8656a3d730900f",
+        "order": 1,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "dd7f76e99ee77dbc",
+        "type": "tls-config",
+        "name": "",
+        "cert": "",
+        "key": "",
+        "ca": "",
+        "certname": "",
+        "keyname": "",
+        "caname": "",
+        "servername": "",
+        "verifyservercert": false,
+        "alpnprotocol": ""
+    },
+    {
+        "id": "0f8656a3d730900f",
+        "type": "ui_tab",
+        "name": "Heizung Input",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    }
+]

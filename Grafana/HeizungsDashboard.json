@@ -1,0 +1,4658 @@
+{
+  "__inputs": [
+    {
+      "name": "DS_SYNOLOGY",
+      "label": "Synology",
+      "description": "",
+      "type": "datasource",
+      "pluginId": "influxdb",
+      "pluginName": "InfluxDB"
+    }
+  ],
+  "__elements": [],
+  "__requires": [
+    {
+      "type": "panel",
+      "id": "barchart",
+      "name": "Bar chart",
+      "version": ""
+    },
+    {
+      "type": "grafana",
+      "id": "grafana",
+      "name": "Grafana",
+      "version": "8.5.2"
+    },
+    {
+      "type": "datasource",
+      "id": "influxdb",
+      "name": "InfluxDB",
+      "version": "1.0.0"
+    },
+    {
+      "type": "panel",
+      "id": "stat",
+      "name": "Stat",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "table",
+      "name": "Table",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "text",
+      "name": "Text",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "timeseries",
+      "name": "Time series",
+      "version": ""
+    }
+  ],
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 64,
+      "panels": [],
+      "title": "Überblick",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_SYNOLOGY}"
+      },
+      "description": "[Admin](http://192.168.1.142:1880/ui/#!/1)\n## Vitoligno 300-P Viessmann\n- Kessel - Nennwärmeleistung  Pn 8 - 24 kW | Feuerungs-Nennwärmeleistung Qn 8,8 - 26.4 KW\n- Kesselklasse 3 | V 100l | PMS 3 bar | TN 95° | Seriennummer: 7452178101116109\n\n## Speicher Sonnenkraft PSR1000\n- **Heizwasser** Inhalt: 1000l | zul. Betriebstemperatur: 95 °C | zul. Betriebsüberdruck: 3 bar |\nSeriennummer: 8602 | Erstelldatum: 10/2011\n- **Solarregister**\nOberfläche: 3,0 m2 | zul. Betriebstemperatur: 110 °C | zul. Betriebsüberdruck: 10 bar",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "dark-blue",
+            "mode": "fixed"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "_value heating.circuits.0.operating.programs.active"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Programm"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "_value heating.circuits.0.operating.modes.active"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Modus"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 7,
+        "x": 0,
+        "y": 1
+      },
+      "id": 34,
+      "interval": "30s",
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/.*/",
+          "values": false
+        },
+        "text": {},
+        "textMode": "value_and_name"
+      },
+      "pluginVersion": "8.5.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_SYNOLOGY}"
+          },
+          "query": "from(bucket: \"heating\")\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\n//  |> range(start: -5m, stop:now())\n  |> filter(fn: (r) =>\n    (r._measurement == \"misc\") \n    and (   \n           r._field == \"heating.circuits.0.operating.modes.active\"\n        or r._field == \"heating.circuits.0.operating.programs.active\"\n    )\n  )\n  |> map(fn: (r) => ({r with \n      _value: if r._value == \"Heizung & Warmwasser\" then \"Heizung & WW\" else r._value\n    }))\n//  |> aggregateWindow(every: $__interval, fn: last)\n  |> last()\n  |> drop(columns: [\"_start\", \"_stop\", \"_time\"])\n  ",
+          "refId": "A"
+        }
+      ],
+      "transformations": [],
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_SYNOLOGY}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "semi-dark-blue",
+            "mode": "fixed"
+          },
+          "decimals": 1,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "heating.boiler.temperature"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Brennerzustand"
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "0": {
+                        "index": 0,
+                        "text": "Ruhe"
+                      },
+                      "1": {
+                        "index": 1,
+                        "text": "Aktiv"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 3,
+        "x": 7,
+        "y": 1
+      },
+      "hideTimeOverride": true,
+      "id": 79,
+      "interval": "1m",
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.5.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_SYNOLOGY}"
+          },
+          "query": "from(bucket: \"heating\")\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\n  //|> range(start: -1d, stop:now())\n  |> filter(fn: (r) =>\n    r._measurement == \"temperature\" \n    and (r._field == \"heating.boiler.temperature\")\n  )\n  |> map(fn: (r) => ({r with \n        _value: if r._value > 0 then 1 else 0\n  }))\n  //|> stateDuration(fn: (r) => r._value > 0)\n  //|> filter(fn: (r) => r.stateDuration >= 0)\n  //|> difference(columns: [\"stateDuration\"], nonNegative: true)\n  //|> aggregateWindow(every: 1d, fn: sum, column: \"stateDuration\")\n  |> aggregateWindow(every: $__interval, fn: mean)\n  //|> tail(n: 10)\n  |> drop(columns: [\"_start\", \"_stop\"])\n\n",
+          "refId": "A"
+        }
+      ],
+      "transformations": [],
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_SYNOLOGY}"
+      },
+      "description": "Heute und letzte 10 Tage",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "semi-dark-blue",
+            "mode": "fixed"
+          },
+          "decimals": 1,
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "stateDuration"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Heute"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 5,
+        "x": 10,
+        "y": 1
+      },
+      "hideTimeOverride": true,
+      "id": 77,
+      "interval": "1m",
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "last"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "value_and_name"
+      },
+      "pluginVersion": "8.5.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_SYNOLOGY}"
+          },
+          "query": "from(bucket: \"heating\")\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\n  //|> range(start: -1d, stop:now())\n  |> filter(fn: (r) =>\n    r._measurement == \"temperature\" \n    and (r._field == \"heating.boiler.temperature\")\n  )\n  |> stateDuration(fn: (r) => r._value > 0)\n//  |> filter(fn: (r) => r.stateDuration >= 0)\n  |> difference(columns: [\"stateDuration\"], nonNegative: true)\n  |> aggregateWindow(every: 1d, fn: sum, column: \"stateDuration\")\n  //|> aggregateWindow(every: $__interval, fn: mean)\n  |> tail(n: 10)\n  |> drop(columns: [\"_start\", \"_stop\"])\n\n",
+          "refId": "A"
+        }
+      ],
+      "timeFrom": "10d",
+      "title": "Brennerstunden 10 Tage",
+      "transformations": [],
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_SYNOLOGY}"
+      },
+      "description": "Brennerstunden in den letzten 10 Tagen",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "semi-dark-blue",
+            "mode": "fixed"
+          },
+          "custom": {
+            "axisLabel": "Brenner.",
+            "axisPlacement": "auto",
+            "axisSoftMin": 0,
+            "fillOpacity": 80,
+            "gradientMode": "opacity",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            }
+          },
+          "decimals": 1,
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 6,
+        "x": 15,
+        "y": 1
+      },
+      "hideTimeOverride": true,
+      "id": 82,
+      "interval": "1m",
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.93,
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "hidden",
+          "placement": "bottom"
+        },
+        "orientation": "auto",
+        "showValue": "auto",
+        "stacking": "none",
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        },
+        "xField": "Datum",
+        "xTickLabelRotation": -30,
+        "xTickLabelSpacing": 0
+      },
+      "pluginVersion": "v1.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_SYNOLOGY}"
+          },
+          "query": "import \"experimental\"\nimport \"date\"\n\n// Define a helper function to return a formatted date\ndateString = (year=false, v) => {\n  d = string(v: date.monthDay(t: v))\n  m = string(v: date.month(t: v))\n  dm = d + \".\" + m + \".\"\n  //s = s + if s == true then \".\" + string(v: date.year(t: v)) else \"\"\n  y = if year then string(v: date.year(t: v)) else \"\"\n  s = dm + y\n  return s\n}\n\nfrom(bucket: \"heating\")\n  //|> range(start: v.timeRangeStart, stop:v.timeRangeStop)\n  |> range(start: -10d, stop:now())\n  |> filter(fn: (r) =>\n    r._measurement == \"temperature\" \n    and (r._field == \"heating.boiler.temperature\")\n  )\n  |> stateDuration(fn: (r) => r._value > 0)\n  //|> filter(fn: (r) => r.stateDuration >= 0)\n  |> difference(columns: [\"stateDuration\"], nonNegative: true)\n  |> aggregateWindow(every: 1d, fn: sum, column: \"stateDuration\")\n  //|> aggregateWindow(every: $__interval, fn: mean)\n  |> tail(n: 10)\n  |> map(fn: (r) => ({r with \n      Datum: if date.hour(t: r._time) != 0 then \"Heute\" else dateString(v: experimental.addDuration(d: -1d, to: r._time))\n    }))\n  |> drop(columns: [\"_start\", \"_stop\"])\n",
+          "refId": "A"
+        }
+      ],
+      "timeFrom": "10d",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "_time": true
+            },
+            "indexByName": {},
+            "renameByName": {
+              "Datum heating.boiler.temperature": "Datum",
+              "_time": "",
+              "stateDuration heating.boiler.temperature": "Brennerstunden"
+            }
+          }
+        }
+      ],
+      "type": "barchart"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_SYNOLOGY}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "red",
+            "mode": "fixed"
+          },
+          "mappings": [],
+          "max": 80,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "celsius"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "_value heating.circuits.0.targetTemperature"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Raum (Soll)"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "_value heating.dhw.temperature.main"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Warmwasser (Soll)"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 6,
+        "x": 0,
+        "y": 4
+      },
+      "id": 36,
+      "interval": "1m",
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/.*/",
+          "values": false
+        },
+        "textMode": "value_and_name"
+      },
+      "pluginVersion": "8.5.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_SYNOLOGY}"
+          },
+          "query": "from(bucket: \"heating\")\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\n//  |> range(start: -5m, stop:now())\n  |> filter(fn: (r) =>\n    r._measurement == \"temperature\" \n    and (r._field == \"heating.dhw.temperature.main\" or r._field == \"heating.circuits.0.targetTemperature\")\n  )\n  |> aggregateWindow(every: $__interval, fn: mean)\n  |> drop(columns: [\"_start\", \"_stop\", \"_time\"])\n  ",
+          "refId": "A"
+        }
+      ],
+      "transformations": [],
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_SYNOLOGY}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "red",
+            "mode": "fixed"
+          },
+          "decimals": 0,
+          "mappings": [],
+          "max": 80,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "celsius"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "_value heating.boiler.sensors.temperature.main"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Heizung Kessel (Ist)"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "_value heating.dhw.sensors.temperature.hotWaterStorage"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Warmwasser Speicher (Ist)"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 6,
+        "x": 6,
+        "y": 4
+      },
+      "id": 38,
+      "interval": "1m",
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/.*/",
+          "values": false
+        },
+        "textMode": "value_and_name"
+      },
+      "pluginVersion": "8.5.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_SYNOLOGY}"
+          },
+          "query": "from(bucket: \"heating\")\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\n//  |> range(start: -10m, stop:now())\n  |> filter(fn: (r) =>\n    r._measurement == \"temperature\" \n    and (r._field == \"heating.dhw.sensors.temperature.hotWaterStorage\" or r._field == \"heating.boiler.sensors.temperature.main\")\n  )\n  |> aggregateWindow(every: $__interval, fn: mean)\n  |> drop(columns: [\"_start\", \"_stop\", \"_time\"])\n  ",
+          "refId": "A"
+        }
+      ],
+      "transformations": [],
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_SYNOLOGY}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "red",
+            "mode": "fixed"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "bool_on_off"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "_value heating.dhw.pumps.circulation"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Warmwasser"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "_value heating.circuits.0.circulation.pump"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Pumpe: Heizung"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "_value heating.dhw.pumps.primary"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Speicherladung"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 7,
+        "x": 12,
+        "y": 4
+      },
+      "id": 37,
+      "interval": "1m",
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/.*/",
+          "values": false
+        },
+        "textMode": "value_and_name"
+      },
+      "pluginVersion": "8.5.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_SYNOLOGY}"
+          },
+          "query": "from(bucket: \"heating\")\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\n  //|> range(start: -5m, stop:now())\n  |> filter(fn: (r) =>\n    r._measurement == \"status\" \n    and (r._field == \"heating.dhw.pumps.circulation\" or r._field == \"heating.circuits.0.circulation.pump\" or r._field == \"heating.dhw.pumps.primary\")\n  )\n  |> aggregateWindow(every: $__interval, fn: mean)\n  |> drop(columns: [\"_start\", \"_stop\", \"_time\"])\n\n",
+          "refId": "A"
+        }
+      ],
+      "transformations": [],
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_SYNOLOGY}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "semi-dark-green",
+            "mode": "fixed"
+          },
+          "decimals": 0,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "celsius"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "heating.sensors.temperature.outside"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Aussen"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 6,
+        "x": 0,
+        "y": 7
+      },
+      "hideTimeOverride": true,
+      "id": 78,
+      "interval": "1m",
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "value_and_name"
+      },
+      "pluginVersion": "8.5.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_SYNOLOGY}"
+          },
+          "query": "from(bucket: \"heating\")\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\n  //|> range(start: today(), stop:now())\n  |> filter(fn: (r) =>\n    r._measurement == \"temperature\" \n    and (r._field == \"heating.sensors.temperature.outside\")\n  )\n//  |> aggregateWindow(every: 1d, fn: mean)\n  |> aggregateWindow(every: $__interval, fn: mean)\n  |> drop(columns: [\"_start\", \"_stop\"])\n\n",
+          "refId": "A"
+        }
+      ],
+      "transformations": [],
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_SYNOLOGY}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "semi-dark-green",
+            "mode": "fixed"
+          },
+          "decimals": 0,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "celsius"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "heating.sensors.temperature.outside"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "⌀"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 6,
+        "x": 6,
+        "y": 7
+      },
+      "hideTimeOverride": true,
+      "id": 80,
+      "interval": "1m",
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "value_and_name"
+      },
+      "pluginVersion": "8.5.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_SYNOLOGY}"
+          },
+          "query": "from(bucket: \"heating\")\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\n  //|> range(start: today(), stop:now())\n  |> filter(fn: (r) =>\n    r._measurement == \"temperature\" \n    and (r._field == \"heating.sensors.temperature.outside\")\n  )\n//  |>last()\n  |> aggregateWindow(every: 1d, fn: mean)\n  //|> aggregateWindow(every: $__interval, fn: mean)\n  |> drop(columns: [\"_start\", \"_stop\"])\n\n",
+          "refId": "A"
+        }
+      ],
+      "timeFrom": "10d",
+      "title": "⌀ Aussen 10 Tage",
+      "transformations": [],
+      "type": "stat"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 10
+      },
+      "id": 62,
+      "panels": [],
+      "title": "Solarthermie",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_SYNOLOGY}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 0,
+          "mappings": [],
+          "max": 120,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              },
+              {
+                "color": "semi-dark-purple",
+                "value": 1
+              }
+            ]
+          },
+          "unit": "celsius"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "temperature _value Panel Ost"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Temperatur"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "status _value Pumpe Ost"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Pumpe"
+              },
+              {
+                "id": "unit",
+                "value": "percent"
+              },
+              {
+                "id": "color"
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "text",
+                      "value": null
+                    },
+                    {
+                      "color": "semi-dark-purple",
+                      "value": 1
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "min",
+                "value": 0
+              },
+              {
+                "id": "max",
+                "value": 100
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 0,
+        "y": 11
+      },
+      "id": 47,
+      "interval": "1m",
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/.*/",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.5.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_SYNOLOGY}"
+          },
+          "query": "from(bucket: \"solar\")\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\n  |> filter(fn: (r) =>\n    (r._measurement == \"temperature\" and (r._field == \"Panel Ost\" )) //or r._field == \"Panel West\") )\n    or\n    (r._measurement == \"status\" and (r._field == \"Pumpe Ost\" )) // or r._field == \"Pumpe West\") )\n  )\n  |> aggregateWindow(every: $__interval, fn: mean)\n  |> drop(columns: [\"_start\", \"_stop\", \"_time\"])\n",
+          "refId": "A"
+        }
+      ],
+      "title": "Panel Ost",
+      "transformations": [],
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_SYNOLOGY}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 0,
+          "mappings": [],
+          "max": 120,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              },
+              {
+                "color": "light-purple",
+                "value": 30
+              }
+            ]
+          },
+          "unit": "celsius"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "temperature _value Panel West"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Temperatur"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "status _value Pumpe West"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Pumpe"
+              },
+              {
+                "id": "unit",
+                "value": "percent"
+              },
+              {
+                "id": "color"
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "text",
+                      "value": null
+                    },
+                    {
+                      "color": "light-purple",
+                      "value": 1
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "min",
+                "value": 0
+              },
+              {
+                "id": "max",
+                "value": 100
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 6,
+        "y": 11
+      },
+      "id": 81,
+      "interval": "1m",
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/.*/",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.5.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_SYNOLOGY}"
+          },
+          "query": "from(bucket: \"solar\")\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\n  |> filter(fn: (r) =>\n    (r._measurement == \"temperature\" and (r._field == \"Panel West\" )) //or r._field == \"Panel West\") )\n    or\n    (r._measurement == \"status\" and (r._field == \"Pumpe West\" )) // or r._field == \"Pumpe West\") )\n  )\n  |> aggregateWindow(every: $__interval, fn: mean)\n  |> drop(columns: [\"_start\", \"_stop\", \"_time\"])\n",
+          "refId": "A"
+        }
+      ],
+      "title": "Panel West",
+      "transformations": [],
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_SYNOLOGY}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "light-blue",
+            "mode": "fixed"
+          },
+          "decimals": 0,
+          "displayName": "Unten",
+          "mappings": [],
+          "max": 80,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "celsius"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "_value Panel Ost"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "semi-dark-purple",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "displayName",
+                "value": "Ost"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "_value Panel West"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "light-purple",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "displayName",
+                "value": "West"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "_value Pufferspeicher unten"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "light-blue",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "displayName",
+                "value": "Unten"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 12,
+        "y": 11
+      },
+      "id": 56,
+      "interval": "1m",
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/.*/",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.5.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_SYNOLOGY}"
+          },
+          "query": "from(bucket: \"solar\")\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\n//  |> range(start: -2h, stop:now())\n  |> filter(fn: (r) =>\n    r._measurement == \"temperature\"\n    and r._field == \"Pufferspeicher unten\"\n  )\n  |> aggregateWindow(every: $__interval, fn: mean)\n  |> drop(columns: [\"_start\", \"_stop\", \"_time\"])\n",
+          "refId": "A"
+        }
+      ],
+      "title": "Speicher",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_SYNOLOGY}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "super-light-purple",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 1
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 15,
+        "y": 11
+      },
+      "id": 51,
+      "interval": "1m",
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/.*/",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.5.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_SYNOLOGY}"
+          },
+          "query": "from(bucket: \"solar\")\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\n//  |> range(start: -2h, stop:now())\n  |> filter(fn: (r) =>\n    r._measurement == \"misc\" \n    and r._field == \"Fehler Maske\"\n  )\n  |> aggregateWindow(every: $__interval, fn: mean)\n  |> drop(columns: [\"_start\", \"_stop\", \"_time\"])\n",
+          "refId": "A"
+        }
+      ],
+      "title": "Fehler",
+      "type": "stat"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 15
+      },
+      "id": 60,
+      "panels": [],
+      "title": "Ascheschublade",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_SYNOLOGY}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "fixed"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "daysSinceLastEmpty"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "Tage"
+              },
+              {
+                "id": "decimals",
+                "value": 0
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "consumptionSinceLastEmpty"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "masskg"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "pro Tag"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "masskg"
+              },
+              {
+                "id": "decimals",
+                "value": 0
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "percentFull"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "percentunit"
+              },
+              {
+                "id": "color"
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "semi-dark-green",
+                      "value": null
+                    },
+                    {
+                      "color": "semi-dark-yellow",
+                      "value": 0.6
+                    },
+                    {
+                      "color": "semi-dark-red",
+                      "value": 0.8
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "decimals",
+                "value": 0
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "daysRemainingTillFull"
+            },
+            "properties": [
+              {
+                "id": "decimals",
+                "value": 0
+              },
+              {
+                "id": "unit",
+                "value": "Tage"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "weeksRemainingTillFull"
+            },
+            "properties": [
+              {
+                "id": "decimals",
+                "value": 1
+              },
+              {
+                "id": "unit",
+                "value": "Wochen"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "monthsRemainingTillFull"
+            },
+            "properties": [
+              {
+                "id": "decimals",
+                "value": 1
+              },
+              {
+                "id": "unit",
+                "value": "Monate"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 24,
+        "x": 0,
+        "y": 16
+      },
+      "id": 58,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/.*/",
+          "values": false
+        },
+        "textMode": "value_and_name"
+      },
+      "pluginVersion": "8.5.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_SYNOLOGY}"
+          },
+          "query": "import \"date\"\nimport \"array\"\n\n// Define a helper function to return a formatted date\ndateString = (year=false, v) => {\n  d = string(v: date.monthDay(t: v))\n  m = string(v: date.month(t: v))\n  dm = d + \".\" + m + \".\"\n  //s = s + if s == true then \".\" + string(v: date.year(t: v)) else \"\"\n  y = if year then string(v: date.year(t: v)) else \"\"\n  s = dm + y\n  return s\n}\n\n\n// Define a helper function to get fields from the most recent pelletsfills entry\ngetLastPelletsfillsField = (value=\"_value\", field) => {\n    val = from(bucket: \"heating\")\n        |> range(start: -1y, stop: now())\n        |> filter(fn: (r) => r._measurement == \"pelletsfills\" and r._field == field)\n        |> last()\n        |> findColumn(fn: (key) => key._field == field, column: value)\n\n    return val[0]\n}\n\n// Define a helper function to get fields from the most recent pelletsfills entry\ngetLastAshtrayemptiesField = (value=\"_value\", field) => {\n    val = from(bucket: \"heating\")\n        |> range(start: -1y, stop: now())\n        |> filter(fn: (r) => r._measurement == \"ashtrayempty\" and r._field == field)\n        |> last()\n        |> findColumn(fn: (key) => key._field == field, column: value)\n\n    return val[0]\n}\n\ndateOfLastEmpty=getLastAshtrayemptiesField(field: \"percentfull\", value: \"_time\")\nx = from(bucket: \"heating\")\n  |> range(start: dateOfLastEmpty, stop: now())\n  |> filter(fn: (r) => r._measurement == \"misc\" and r._field == \"pellets.consumption\")\n  |> difference()\n  |> sum()\n  |> findColumn(fn: (key) => key._field == \"pellets.consumption\", column: \"_value\")\nconsumptionSinceLastEmpty = if exists x[0] then x[0] else 0.000001\n//extraconsumption=getLastAshtrayemptiesField(field: \"extraconsumption\")\npercentfull=getLastAshtrayemptiesField(field: \"percentfull\")\n\nnanoSecondsToDays=1000000000*60*60*24\ndurationSinceLastEmpty = duration(v: int(v: now()) - int(v: dateOfLastEmpty))\ndaysSinceLastEmpty = float(v: int(v: durationSinceLastEmpty)) / float(v: nanoSecondsToDays)\nconsumptionPerDay = consumptionSinceLastEmpty / daysSinceLastEmpty\n\nCAPACITY_PER_ASHTRAY=600.0 // Estimate of how many kg of pellets produce ash that fits into one tray load\nremainingCapacity = CAPACITY_PER_ASHTRAY - consumptionPerDay\n  \nrec = {\n    dateOfLastEmpty: dateOfLastEmpty,\n    dateOfLastEmptyDisplay: dateString(v: dateOfLastEmpty),\n    daysSinceLastEmpty : daysSinceLastEmpty,\n    consumptionSinceLastEmpty : consumptionSinceLastEmpty,\n    consumptionPerDay: consumptionPerDay,\n    percentFull :    consumptionSinceLastEmpty/CAPACITY_PER_ASHTRAY,   \n    daysRemainingTillFull:   remainingCapacity / consumptionPerDay,\n    weeksRemainingTillFull:  remainingCapacity / consumptionPerDay / 7.0,\n    monthsRemainingTillFull: remainingCapacity / consumptionPerDay / 30.0\n}\n\narray.from(rows: [rec])\n",
+          "refId": "A"
+        }
+      ],
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "consumptionPerDay": false,
+              "dateOfLastEmpty": true,
+              "daysRemainingTillFull": true,
+              "monthsRemainingTillFull": true,
+              "weeksRemainingTillFull": false
+            },
+            "indexByName": {
+              "consumptionPerDay": 4,
+              "consumptionSinceLastEmpty": 3,
+              "dateOfLastEmpty": 1,
+              "dateOfLastEmptyDisplay": 0,
+              "daysRemainingTillFull": 6,
+              "daysSinceLastEmpty": 2,
+              "monthsRemainingTillFull": 8,
+              "percentFull": 5,
+              "weeksRemainingTillFull": 7
+            },
+            "renameByName": {
+              "consumptionPerDay": "pro Tag",
+              "consumptionSinceLastEmpty": "Verbrannt",
+              "dateOfLastEmpty": "",
+              "dateOfLastEmptyDisplay": "Leerung",
+              "daysRemainingTillFull": "Prognose",
+              "daysSinceLastEmpty": "Seitdem",
+              "monthsRemainingTillFull": " _",
+              "percentFull": "Füllstand",
+              "weeksRemainingTillFull": "Prognose"
+            }
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 20
+      },
+      "id": 72,
+      "panels": [],
+      "title": "Pelletsverbrauch pro Tag",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_SYNOLOGY}"
+      },
+      "description": "Pellets Verbrauch pro Tag. Letzte 7 Tage",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "green",
+            "mode": "fixed"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "axisSoftMin": 0,
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            }
+          },
+          "decimals": 0,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "masskg"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Temperatur ⌀"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "celsius"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "_time"
+            },
+            "properties": [
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": true,
+                  "viz": false
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Kosten"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "€"
+              },
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 18,
+        "x": 0,
+        "y": 21
+      },
+      "id": 28,
+      "links": [],
+      "options": {
+        "barRadius": 0.05,
+        "barWidth": 0.97,
+        "colorByField": "Temperatur ⌀",
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "hidden",
+          "placement": "bottom"
+        },
+        "orientation": "auto",
+        "showValue": "always",
+        "stacking": "none",
+        "text": {
+          "valueSize": 19
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        },
+        "xField": "Datum",
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 100
+      },
+      "pluginVersion": "v1.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_SYNOLOGY}"
+          },
+          "query": "import \"interpolate\"\nimport \"date\"\nimport \"strings\"\nimport \"experimental\"\n\n// Define a helper function to return a formatted date\ndateString = (year=false, v) => {\n  d = string(v: date.monthDay(t: v))\n  m = string(v: date.month(t: v))\n  dm = d + \".\" + m + \".\"\n  //s = s + if s == true then \".\" + string(v: date.year(t: v)) else \"\"\n  y = if year then string(v: date.year(t: v)) else \"\"\n  s = dm + y\n  return s\n}\n\n// Define a helper function to get fields from the most recent pelletsfills entry\ngetLastPelletsfillsField = (value=\"_value\", field) => {\n    val = from(bucket: \"heating\")\n        |> range(start: -1y, stop: now())\n        |> filter(fn: (r) => r._measurement == \"pelletsfills\" and r._field == field)\n        |> last()\n        |> findColumn(fn: (key) => key._field == field, column: value)\n\n    return val[0]\n}\n\nlastKg = getLastPelletsfillsField(field: \"kg\")\nlastPriceTotal = getLastPelletsfillsField(field: \"priceTotal\")\nlastPricePerKg = lastPriceTotal / lastKg\n\nbeginOfMeasurments=2022-03-24T00:00:00.00Z\nstarttime = -8d // need to add a day to get first day rigth\nstoptime = now()\nconsumption = from(bucket: \"heating\")\n  |> range(start: beginOfMeasurments, stop: stoptime)\n  |> filter(fn: (r) => r._measurement == \"misc\" and r._field == \"pellets.consumption\")\n  |> interpolate.linear(every: 1h)\n  |> difference()\n  |> range(start: starttime, stop:stoptime)\n  |> aggregateWindow(every: 1d, fn: sum)\n  |> map(fn: (r) => ({r with \n      Datum: if date.hour(t: r._time) != 0 then \"Heute\" else dateString(v: experimental.addDuration(d: -1d, to: r._time)),\n      Kosten: r._value * lastPricePerKg\n    }))\n  \ntemperature =  from(bucket: \"heating\")\n  |> range(start: beginOfMeasurments, stop: stoptime)\n  |> filter(fn: (r) => r._measurement == \"temperature\" and r._field == \"heating.sensors.temperature.outside\")\n  |> range(start: starttime, stop:stoptime)\n  |> aggregateWindow(every: 1d, fn: mean)\n\nsevenDaysAgo = experimental.addDuration(d: -7d, to: now())\njoin(tables: {t1: consumption, t2: temperature}, on: [\"_time\"])\n  |> map(fn: (r) => ({r with \n        Datum     : r.Datum,\n        Kosten    : if r.Kosten > 0.0 then r.Kosten else 0.0, //sometimes Kosten is undefined, return 0 then\n        consumption: if r._value_t1 > 0.0 then r._value_t1 else 0.0, //sometimes consumption is undefined, return 0 then\n        temperature: r._value_t2\n    }))\n    |> filter(fn: (r) => r._time > sevenDaysAgo)\n    |> keep(columns: [\"Kosten\", \"Datum\", \"consumption\", \"temperature\", \"_time\"])\n    |> yield(name: \"consumption and temperature\")\n",
+          "refId": "A"
+        }
+      ],
+      "transformations": [
+        {
+          "id": "sortBy",
+          "options": {
+            "fields": {},
+            "sort": [
+              {
+                "desc": true,
+                "field": "_time"
+              }
+            ]
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {},
+            "indexByName": {
+              "Datum": 1,
+              "Kosten": 3,
+              "_time": 0,
+              "consumption": 2,
+              "temperature": 4
+            },
+            "renameByName": {
+              "Datum": "Datum",
+              "Datum pellets.consumption": "Datum",
+              "Kosten": "Kosten",
+              "Tag pellets.consumption": "Tag",
+              "_value pellets.consumption": "Verbrauch",
+              "consumption": "Verbrauch",
+              "temperature": "Temperatur ⌀"
+            }
+          }
+        }
+      ],
+      "type": "barchart"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_SYNOLOGY}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "green",
+            "mode": "fixed"
+          },
+          "decimals": 0,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "masskg"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "price"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "€"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 5,
+        "x": 18,
+        "y": 21
+      },
+      "id": 22,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "value"
+      },
+      "pluginVersion": "8.5.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_SYNOLOGY}"
+          },
+          "query": "import \"interpolate\"\nimport \"date\"\nimport \"strings\"\nimport \"experimental\"\n// Define a helper function to get fields from the most recent pelletsfills entry\ngetLastPelletsfillsField = (value=\"_value\", field) => {\n    val = from(bucket: \"heating\")\n        |> range(start: -1y, stop: now())\n        |> filter(fn: (r) => r._measurement == \"pelletsfills\" and r._field == field)\n        |> last()\n        |> findColumn(fn: (key) => key._field == field, column: value)\n\n    return val[0]\n}\n\nlastKg = getLastPelletsfillsField(field: \"kg\")\nlastPriceTotal = getLastPelletsfillsField(field: \"priceTotal\")\nlastPricePerKg = lastPriceTotal / lastKg\n\nbeginOfMeasurments=2022-03-24T00:00:00.00Z\nstarttime = -8d // need to add a day to get first day rigth\nsevenDaysAgo = experimental.addDuration(d: -7d, to: now())\nstoptime = now()\nfrom(bucket: \"heating\")\n  |> range(start: beginOfMeasurments, stop: stoptime)\n  |> filter(fn: (r) => r._measurement == \"misc\" and r._field == \"pellets.consumption\")\n  |> interpolate.linear(every: 1h)\n  |> difference()\n  |> range(start: starttime, stop:stoptime)\n  |> aggregateWindow(every: 1d, fn: sum)\n  |> filter(fn: (r) => r._time > sevenDaysAgo)\n  // sometimes we get the last days with 0 consumption - not clear how that happens.\n  //|> filter(fn: (r) => r._value > 0)\n  // filter out the last, ongoing day windows because it would distort the average\n  |> filter(fn: (r) => date.hour(t: r._time) == 0)\n  |> map(fn: (r) => ({ r with _value: if r._value > 0.0 then r._value else 0.0 })) // when the value is undefined it should count as 0\n  |> mean()\n  |> map(fn: (r) => ({r with \n        price: lastPricePerKg * r._value\n    }))\n  |> drop(columns: [\"_start\", \"_stop\"])\n  ",
+          "refId": "A"
+        }
+      ],
+      "title": "Durchschnitt letzte 7 Tage",
+      "transformations": [
+        {
+          "id": "sortBy",
+          "options": {
+            "fields": {},
+            "sort": [
+              {
+                "desc": true,
+                "field": "Time"
+              }
+            ]
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 27
+      },
+      "id": 74,
+      "panels": [],
+      "title": "Pelletsverbrauch pro Woche",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_SYNOLOGY}"
+      },
+      "description": "Letzte 8 Wochen.\nAus technischen Gründen beginnt eine neue Woche immer Donnerstags um Mitternacht",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "green",
+            "mode": "fixed"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "axisSoftMin": 0,
+            "fillOpacity": 80,
+            "gradientMode": "hue",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "masskg"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Temperatur ⌀"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "celsius"
+              },
+              {
+                "id": "decimals",
+                "value": 0
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "_time"
+            },
+            "properties": [
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": true,
+                  "viz": false
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Kosten"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "€"
+              },
+              {
+                "id": "decimals",
+                "value": 0
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 18,
+        "x": 0,
+        "y": 28
+      },
+      "id": 30,
+      "links": [],
+      "options": {
+        "barRadius": 0.05,
+        "barWidth": 0.99,
+        "colorByField": "temperature",
+        "groupWidth": 0.91,
+        "legend": {
+          "calcs": [],
+          "displayMode": "hidden",
+          "placement": "bottom"
+        },
+        "orientation": "auto",
+        "showValue": "always",
+        "stacking": "none",
+        "text": {
+          "valueSize": 19
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        },
+        "xField": "Datum",
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 100
+      },
+      "pluginVersion": "v1.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_SYNOLOGY}"
+          },
+          "query": "import \"interpolate\"\nimport \"math\"\nimport \"date\"\nimport \"strings\"\nimport \"experimental\"\n\n// Define a helper function to return a formatted date\ndateString = (year=false, v) => {\n  d = string(v: date.monthDay(t: v))\n  m = string(v: date.month(t: v))\n  dm = d + \".\" + m + \".\"\n  //s = s + if s == true then \".\" + string(v: date.year(t: v)) else \"\"\n  y = if year then string(v: date.year(t: v)) else \"\"\n  s = dm + y\n  return s\n}\n\n// Define a helper function to get fields from the most recent pelletsfills entry\ngetLastPelletsfillsField = (value=\"_value\", field) => {\n    val = from(bucket: \"heating\")\n        |> range(start: -1y, stop: now())\n        |> filter(fn: (r) => r._measurement == \"pelletsfills\" and r._field == field)\n        |> last()\n        |> findColumn(fn: (key) => key._field == field, column: value)\n\n    return val[0]\n}\n\nlastKg = getLastPelletsfillsField(field: \"kg\")\nlastPriceTotal = getLastPelletsfillsField(field: \"priceTotal\")\nlastPricePerKg = lastPriceTotal / lastKg\n\nstoptime = now()\ntemperature =  from(bucket: \"heating\")\n  |> range(start: 2022-03-24T00:00:00.00Z, stop: stoptime)\n  |> filter(fn: (r) =>\n    r._measurement == \"temperature\" and\n    r._field == \"heating.sensors.temperature.outside\"\n  )\n  |> range(start: -8w, stop:stoptime)\n  |> aggregateWindow(every: 1w, fn: mean)\n  |> drop(columns: [\"_start\", \"_stop\"])\n  // in the future this wont be needed but right now we end up with an \"empty\" week at the beginning\n//  |> filter(fn: (r) => r._value > 0)\n  \nconsumption = from(bucket: \"heating\")\n  |> range(start: 2022-03-24T00:00:00.00Z, stop: stoptime)\n  |> filter(fn: (r) =>\n    r._measurement == \"misc\" and\n    r._field == \"pellets.consumption\"\n  )\n  |> interpolate.linear(every: 1h)\n  |> range(start: -8w, stop:stoptime)\n  |> difference()\n  |> aggregateWindow(every: 1w, fn: sum)\n  |> map(fn: (r) => ({r with \n      _value: math.roundtoeven(x: r._value),\n      Datum: if date.hour(t: r._time) != 0 then \"Seit Donnerstag\" else dateString(v: experimental.addDuration(d: -1d, to: r._time)),\n      Kosten : r._value * lastPricePerKg\n    }))\n  |> drop(columns: [\"_start\", \"_stop\"])\n  // in the future this wont be needed but right now we end up with an \"empty\" week at the beginning\n  //|> filter(fn: (r) => r._value > 0)\n  \n  join(tables: {t1: consumption, t2: temperature}, on: [\"_time\"])\n    |> map(fn: (r) => ({r with \n        Datum     : r.Datum,\n        Kosten    : if r.Kosten > 0.0 then r.Kosten else 0.0, //sometimes Kosten is undefined, return 0 then\n        consumption: if r._value_t1 > 0.0 then r._value_t1 else 0.0, //sometimes consumption is undefined, return 0 then\n        temperature: r._value_t2\n    }))\n//    |> filter(fn: (r) => r.consumption > 0)\n    |> keep(columns: [\"Datum\", \"consumption\", \"temperature\", \"Kosten\", \"_time\"])\n    |> yield(name: \"consumption and temperature\")\n",
+          "refId": "A"
+        }
+      ],
+      "transformations": [
+        {
+          "id": "sortBy",
+          "options": {
+            "fields": {},
+            "sort": [
+              {
+                "desc": true,
+                "field": "_time"
+              }
+            ]
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {},
+            "indexByName": {
+              "Datum": 1,
+              "Kosten": 3,
+              "_time": 0,
+              "consumption": 2,
+              "temperature": 4
+            },
+            "renameByName": {
+              "Datum": "Datum",
+              "Datum pellets.consumption": "Datum",
+              "Kosten": "Kosten",
+              "Tag pellets.consumption": "Tag",
+              "_value pellets.consumption": "Verbrauch",
+              "consumption": "Verbrauch",
+              "temperature": "Temperatur ⌀"
+            }
+          }
+        }
+      ],
+      "type": "barchart"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_SYNOLOGY}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "green",
+            "mode": "fixed"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "masskg"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "price"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "€"
+              },
+              {
+                "id": "decimals",
+                "value": 0
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 5,
+        "x": 18,
+        "y": 28
+      },
+      "id": 24,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "value"
+      },
+      "pluginVersion": "8.5.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_SYNOLOGY}"
+          },
+          "query": "import \"date\"\nimport \"interpolate\"\n\n// Define a helper function to get fields from the most recent pelletsfills entry\ngetLastPelletsfillsField = (value=\"_value\", field) => {\n    val = from(bucket: \"heating\")\n        |> range(start: -1y, stop: now())\n        |> filter(fn: (r) => r._measurement == \"pelletsfills\" and r._field == field)\n        |> last()\n        |> findColumn(fn: (key) => key._field == field, column: value)\n\n    return val[0]\n}\n\nlastKg = getLastPelletsfillsField(field: \"kg\")\nlastPriceTotal = getLastPelletsfillsField(field: \"priceTotal\")\nlastPricePerKg = lastPriceTotal / lastKg\n\nfrom(bucket: \"heating\")\n  |> range(start: 2022-03-24T00:00:00.00Z, stop: now())\n  |> filter(fn: (r) => r._measurement == \"misc\" and r._field == \"pellets.consumption\")\n  |> interpolate.linear(every: 1h)\n  |> range(start: -8w, stop: now())\n  |> difference()\n  |> aggregateWindow(every: 1w, fn: sum)\n  |> filter(fn: (r) => date.hour(t: r._time) == 0)\n  //|> map(fn: (r) => ({ r with _value: if r._value > 0.0 then r._value else 0.0 })) // when the value is undefined it should count as 0\n  |> mean()\n  |> map(fn: (r) => ({r with \n      price: lastPricePerKg * r._value\n  }))\n  |> drop(columns: [\"_start\", \"_stop\", \"_field\", \"_measurement\"])",
+          "refId": "A"
+        }
+      ],
+      "title": "Wochendurchschnitt letzte 8 Wochen",
+      "transformations": [
+        {
+          "id": "sortBy",
+          "options": {
+            "fields": {},
+            "sort": [
+              {
+                "desc": true,
+                "field": "Time"
+              }
+            ]
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {},
+            "indexByName": {},
+            "renameByName": {
+              "price": "",
+              "priceKg": ""
+            }
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 34
+      },
+      "id": 68,
+      "panels": [],
+      "title": "Pelletsverbrauch pro Monat & Gesamt",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_SYNOLOGY}"
+      },
+      "description": "Verbrauch pro Monat. Letzte 12 Monate",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "green",
+            "mode": "fixed"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "axisSoftMin": 0,
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            }
+          },
+          "decimals": 0,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              }
+            ]
+          },
+          "unit": "masskg"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "temperature"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "celsius"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Datum"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "none"
+              },
+              {
+                "id": "decimals",
+                "value": 4
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "_time"
+            },
+            "properties": [
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": true,
+                  "tooltip": true,
+                  "viz": true
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Kosten"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "€"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 18,
+        "x": 0,
+        "y": 35
+      },
+      "id": 31,
+      "links": [],
+      "options": {
+        "barRadius": 0.05,
+        "barWidth": 0.97,
+        "colorByField": "_time",
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "hidden",
+          "placement": "bottom"
+        },
+        "orientation": "auto",
+        "showValue": "auto",
+        "stacking": "none",
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        },
+        "xField": "Datum",
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 0
+      },
+      "pluginVersion": "v1.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_SYNOLOGY}"
+          },
+          "query": "import \"interpolate\"\nimport \"date\"\nimport \"strings\"\nimport \"experimental\"\n\n// Define a helper function to return a formatted date\ndateString = (year=false, day=true, v) => {\n  d = string(v: date.monthDay(t: v))\n  m = string(v: date.month(t: v))\n  dm = if day then d + \".\" + m + \".\" else  m + \".\"\n  //s = s + if s == true then \".\" + string(v: date.year(t: v)) else \"\"\n  y = if year then string(v: date.year(t: v)) else \"\"\n  s = dm + y\n  return s\n}\n\n// Define a helper function to get fields from the most recent pelletsfills entry\ngetLastPelletsfillsField = (value=\"_value\", field) => {\n    val = from(bucket: \"heating\")\n        |> range(start: -1y, stop: now())\n        |> filter(fn: (r) => r._measurement == \"pelletsfills\" and r._field == field)\n        |> last()\n        |> findColumn(fn: (key) => key._field == field, column: value)\n\n    return val[0]\n}\n\nlastKg = getLastPelletsfillsField(field: \"kg\")\nlastPriceTotal = getLastPelletsfillsField(field: \"priceTotal\")\nlastPricePerKg = lastPriceTotal / lastKg\n\n//beginOfMeasurments=2022-03-24T00:00:00.00Z\nbeginOfMeasurments=2022-04-01T00:00:00.00Z // start at beginning of the first month where we have complete measurements\nstoptime = now()\n\ntemperature =  from(bucket: \"heating\")\n  |> range(start: beginOfMeasurments, stop: stoptime)\n  |> filter(fn: (r) => r._measurement == \"temperature\" and r._field == \"heating.sensors.temperature.outside\")\n  |> range(start: -12mo, stop:stoptime)\n  |> aggregateWindow(every: 1mo, fn: mean)\n  |> drop(columns: [\"_start\", \"_stop\"])\n  // in the future this wont be needed but right now we end up with an \"empty\" week at the beginning\n  |> filter(fn: (r) => r._value > 0)\n\nconsumption = from(bucket: \"heating\")\n  |> range(start: beginOfMeasurments, stop: stoptime)\n  |> filter(fn: (r) => r._measurement == \"misc\" and r._field == \"pellets.consumption\")\n  |> interpolate.linear(every: 1h)\n  |> difference()\n  |> range(start: -12mo, stop:stoptime)\n  |> aggregateWindow(every: 1mo, fn: sum)\n  |> map(fn: (r) => ({r with \n      Datum: if date.hour(t: r._time) != 0 then \"Laufender Monat\" else dateString(v: experimental.addDuration(d: -1mo, to: r._time), year: true, day: false),\n      Kosten : r._value * lastPricePerKg\n    }))\n  |> drop(columns: [\"_start\", \"_stop\"])\n  |> filter(fn: (r) => r._value > 0)\n  |> sort(desc: true, columns: [\"Datum\"])\n\n  join(tables: {t1: consumption, t2: temperature}, on: [\"_time\"])\n    |> map(fn: (r) => ({r with \n        Datum     : r.Datum,\n        Kosten    : if r.Kosten > 0.0 then r.Kosten else 0.0, //sometimes Kosten is undefined, return 0 then\n        consumption: if r._value_t1 > 0.0 then r._value_t1 else 0.0, //sometimes consumption is undefined, return 0 then\n        temperature: r._value_t2\n    }))\n    |> filter(fn: (r) => r.consumption > 0)\n    |> keep(columns: [\"Datum\", \"consumption\", \"temperature\", \"Kosten\", \"_time\"])\n    |> yield(name: \"consumption and temperature\")\n",
+          "refId": "A"
+        }
+      ],
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "_time": false
+            },
+            "indexByName": {
+              "Datum": 1,
+              "Kosten": 3,
+              "_time": 0,
+              "consumption": 2,
+              "temperature": 4
+            },
+            "renameByName": {
+              "Datum": "Datum",
+              "Datum pellets.consumption": "Datum",
+              "Kosten": "Kosten",
+              "Tag pellets.consumption": "Tag",
+              "_time": "Zeit",
+              "_value pellets.consumption": "Verbrauch",
+              "consumption": "Verbrauch",
+              "temperature": "Temperatur ⌀"
+            }
+          }
+        },
+        {
+          "id": "sortBy",
+          "options": {
+            "fields": {},
+            "sort": [
+              {
+                "desc": true,
+                "field": "Zeit"
+              }
+            ]
+          }
+        }
+      ],
+      "type": "barchart"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_SYNOLOGY}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "green",
+            "mode": "fixed"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              }
+            ]
+          },
+          "unit": "masskg"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "price"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "€"
+              },
+              {
+                "id": "decimals",
+                "value": 0
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 5,
+        "x": 18,
+        "y": 35
+      },
+      "id": 32,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "value"
+      },
+      "pluginVersion": "8.5.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_SYNOLOGY}"
+          },
+          "query": "import \"interpolate\"\nimport \"date\"\nimport \"math\"\nimport \"experimental\"\n\n// Define a helper function to get the minimum of two durations\nmaxTime = (x , y) => {\n  xFloat = float(v: int(v: x))\n  yFloat = float(v: int(v: y))\n  maxFloat = math.mMax(x: xFloat, y: yFloat)\n  return time(v: int(v: maxFloat))\n}\n// Define a helper function to get the minimum of two durations\nminTime = (x , y) => {\n  xFloat = float(v: int(v: x))\n  yFloat = float(v: int(v: y))\n  minFloat = math.mMin(x: xFloat, y: yFloat)\n  return time(v: int(v: minFloat))\n}\n\n// Define a helper function to get fields from the most recent pelletsfills entry\ngetLastPelletsfillsField = (value=\"_value\", field) => {\n    val = from(bucket: \"heating\")\n        |> range(start: -1y, stop: now())\n        |> filter(fn: (r) => r._measurement == \"pelletsfills\" and r._field == field)\n        |> last()\n        |> findColumn(fn: (key) => key._field == field, column: value)\n\n    return val[0]\n}\n\nlastKg = getLastPelletsfillsField(field: \"kg\")\nlastPriceTotal = getLastPelletsfillsField(field: \"priceTotal\")\nlastPricePerKg = lastPriceTotal / lastKg\n\nbeginOfMeasurments=2022-04-01T00:00:00.00Z // start at beginning of the first month where we have complete measurements\nbeginOfAggregation = maxTime(x: experimental.subDuration(d: 12mo, from: now()), y: beginOfMeasurments) // not really necessary as there are no values before being of measurements anyway\nstoptime = now()\n\nfrom(bucket: \"heating\")\n  |> range(start: beginOfMeasurments, stop: stoptime)\n  |> filter(fn: (r) => r._measurement == \"misc\" and r._field == \"pellets.consumption\")\n  |> interpolate.linear(every: 1h)\n  |> difference()\n  |> range(start: beginOfAggregation, stop:stoptime)\n  |> aggregateWindow(every: 1mo, fn: sum)\n  |> filter(fn: (r) => r._value > 0)\n  // filter out the last, ongoing day windows because it would distort the average\n  |> filter(fn: (r) => date.hour(t: r._time) == 0)\n  |> map(fn: (r) => ({ r with _value: if r._value > 0.0 then r._value else 0.0 })) // when the value is undefined it should count as 0\n  |> mean()\n  |> map(fn: (r) => ({r with \n      price: lastPricePerKg * r._value,\n      beginOfAggregation: time(v: beginOfAggregation)\n    }))\n  |> drop(columns: [\"_start\", \"_stop\"])\n    \n",
+          "refId": "A"
+        }
+      ],
+      "title": "Monatsdurchschnitt letzte 12 Monate",
+      "transformations": [],
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_SYNOLOGY}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "green",
+            "mode": "fixed"
+          },
+          "decimals": 0,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              }
+            ]
+          },
+          "unit": "kg"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 5,
+        "x": 18,
+        "y": 38
+      },
+      "id": 26,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "value"
+      },
+      "pluginVersion": "8.5.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_SYNOLOGY}"
+          },
+          "hide": false,
+          "query": "import \"interpolate\"\nimport \"math\"\nfrom(bucket: \"heating\")\n  |> range(start: 2022-03-24T00:00:00.00Z, stop:now())\n  |> filter(fn: (r) =>\n    r._measurement == \"misc\" and\n    r._field == \"pellets.consumption\"\n  )\n  |> last()",
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_SYNOLOGY}"
+          },
+          "query": "import \"interpolate\"\nimport \"math\"\nfrom(bucket: \"heating\")\n  |> range(start: 2022-03-24T00:00:00.00Z, stop:now())\n  |> filter(fn: (r) =>\n    r._measurement == \"misc\" and\n    r._field == \"pellets.consumption\"\n  )\n  |> difference()\n  |> sum()\n  |> map(fn: (r) => ({r with \n      _value: math.roundtoeven(x: r._value)\n    }))\n  |> last()",
+          "refId": "A"
+        }
+      ],
+      "title": "Pelletsverbrauch: Gesamt & seit 04 2022",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {}
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_SYNOLOGY}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "green",
+            "mode": "fixed"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              }
+            ]
+          },
+          "unit": "masskg"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "monthsRemainingTillEmpty"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "none"
+              },
+              {
+                "id": "decimals",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "pelletsAfterLastRefill"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "masst"
+              },
+              {
+                "id": "decimals",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "remainingPellets"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "masst"
+              },
+              {
+                "id": "decimals",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "consumptionSinceRefill"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "masst"
+              },
+              {
+                "id": "decimals",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "consumptionPerDay"
+            },
+            "properties": [
+              {
+                "id": "decimals",
+                "value": 0
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 18,
+        "x": 0,
+        "y": 41
+      },
+      "id": 41,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "value_and_name"
+      },
+      "pluginVersion": "8.5.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_SYNOLOGY}"
+          },
+          "hide": false,
+          "query": "import \"date\"\nimport \"array\"\n\n// Define a helper function to get fields from the most recent pelletsfills entry\ngetLastPelletsfillsField = (value=\"_value\", field) => {\n    val = from(bucket: \"heating\")\n        |> range(start: -1y, stop: now())\n        |> filter(fn: (r) => r._measurement == \"pelletsfills\" and r._field == field)\n        |> last()\n        |> findColumn(fn: (key) => key._field == field, column: value)\n\n    return val[0]\n}\n\ndateOfLastRefill=getLastPelletsfillsField(field: \"kg\", value: \"_time\")\nx = from(bucket: \"heating\")\n  |> range(start: dateOfLastRefill, stop: now())\n  |> filter(fn: (r) => r._measurement == \"misc\" and r._field == \"pellets.consumption\")\n  |> difference()\n  |> sum()\n  |> findColumn(fn: (key) => key._field == \"pellets.consumption\", column: \"_value\")\nconsumptionSinceRefill = x[0]\n\nnanoSecondsToDays=1000000000*60*60*24\ndurationSinceLastRefill = duration(v: int(v: now()) - int(v: dateOfLastRefill))\ndaysSinceLastRefill = float(v: int(v: durationSinceLastRefill)) / float(v: nanoSecondsToDays)\npelletsAfterLastRefill=getLastPelletsfillsField(field: \"kg\")\nremainingPellets = pelletsAfterLastRefill-consumptionSinceRefill\nconsumptionPerDay = consumptionSinceRefill / daysSinceLastRefill\n  \nrec = {\n    consumptionSinceRefill: consumptionSinceRefill / 1000.0, \n    pelletsAfterLastRefill: pelletsAfterLastRefill / 1000.0,\n    remainingPellets: remainingPellets / 1000.0,\n    daysSinceLastRefill: daysSinceLastRefill,\n    consumptionPerDay: consumptionPerDay,\n    daysRemainingTillEmpty:   remainingPellets / consumptionPerDay,\n    weeksRemainingTillEmpty:  remainingPellets / consumptionPerDay / 7.0,\n    monthsRemainingTillEmpty: remainingPellets / consumptionPerDay / 30.0\n}\n\narray.from(rows: [rec])\n",
+          "refId": "A"
+        }
+      ],
+      "title": "Pellets Verbrauchsprognose",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "daysRemainingTillEmpty": true,
+              "daysSinceLastRefill": true,
+              "pelletsAfterLastRefill": false,
+              "weeksRemainingTillEmpty": true
+            },
+            "indexByName": {
+              "consumptionPerDay": 3,
+              "consumptionSinceRefill": 1,
+              "daysRemainingTillEmpty": 5,
+              "daysSinceLastRefill": 4,
+              "monthsRemainingTillEmpty": 7,
+              "pelletsAfterLastRefill": 0,
+              "remainingPellets": 2,
+              "weeksRemainingTillEmpty": 6
+            },
+            "renameByName": {
+              "_value": "Verbrauch seit Füllung",
+              "consumptionPerDay": "Tagesverbrauch",
+              "consumptionSinceRefill": "Verbraucht",
+              "daysRemainingTillEmpty": "Verbleibende Tage",
+              "daysSinceLastRefill": "Tage seit letzter Füllung",
+              "monthsRemainingTillEmpty": "Monate",
+              "pelletsAfterLastRefill": "Nach Füllung",
+              "remainingPellets": "Bestand",
+              "weeksRemainingTillEmpty": "Verbleibende Wochen"
+            }
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 45
+      },
+      "id": 66,
+      "panels": [],
+      "title": "Temperaturen und Zeitverläufe",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_SYNOLOGY}"
+      },
+      "description": "- Rot: Heizung\n- Blau: Warmwasser/Pufferspeicher\n- Lila: Solarthermie\n- Grün: Aussentemperatur\n- Gestrichelt: Soll-Temperaturen",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "smooth",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "decimals": 0,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              }
+            ]
+          },
+          "unit": "celsius"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "heating.boiler.sensors.temperature.main"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Kessel"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "heating.sensors.temperature.outside"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Aussentemperatur"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "heating.boiler.sensors.temperature.main"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Kessel-Ist"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "heating.boiler.temperature"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Kessel-Soll"
+              },
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    0,
+                    3,
+                    3
+                  ],
+                  "fill": "dot"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "heating.buffer.sensors.temperature.top"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Kessel Puffer Oben"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "heating.circuits.0.sensors.temperature.supply"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Vorlauftemperatur"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "heating.dhw.sensors.temperature.hotWaterStorage"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Speicher"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "heating.dhw.temperature.main"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Warmwasser Soll"
+              },
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    0,
+                    3,
+                    3
+                  ],
+                  "fill": "dot"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "heating.circuits.0.targetTemperature"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Raumheizung Ziel"
+              },
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    0,
+                    3,
+                    3
+                  ],
+                  "fill": "dot"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Kessel-Soll"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "light-red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Raumheizung Ziel"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "light-red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Warmwasser Soll"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "light-blue",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Kessel-Ist"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Vorlauftemperatur"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "dark-orange",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Aussentemperatur"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Speicher"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "blue",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Panel Ost"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "semi-dark-purple",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "displayName",
+                "value": "Panel Ost"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Panel West"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "light-purple",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "displayName",
+                "value": "Panel West"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Pufferspeicher unten"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Pufferspeicher unten"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "dark-blue",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 23,
+        "w": 23,
+        "x": 0,
+        "y": 46
+      },
+      "id": 4,
+      "options": {
+        "legend": {
+          "calcs": [
+            "max",
+            "min",
+            "mean",
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "v1.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_SYNOLOGY}"
+          },
+          "query": "from(bucket: \"heating\")\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\n  |> filter(fn: (r) =>\n    r._measurement == \"temperature\" \n  )\n  |> aggregateWindow(every: $__interval, fn: mean)\n",
+          "refId": "Heizung"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_SYNOLOGY}"
+          },
+          "hide": false,
+          "query": "from(bucket: \"solar\")\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\n  |> filter(fn: (r) =>\n    r._measurement == \"temperature\"\n    and r._field != \"S4\"\n  )\n  |> aggregateWindow(every: $__interval, fn: mean)\n",
+          "refId": "Solarthermie"
+        }
+      ],
+      "title": "Temperaturverläufe",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_SYNOLOGY}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "max": 100,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Pumpe Ost"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "semi-dark-purple",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Pumpe West"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "light-purple",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 23,
+        "x": 0,
+        "y": 69
+      },
+      "id": 55,
+      "options": {
+        "legend": {
+          "calcs": [
+            "max"
+          ],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_SYNOLOGY}"
+          },
+          "query": "from(bucket: \"solar\")\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\n  |> filter(fn: (r) =>\n    r._measurement == \"status\" \n  )\n  |> aggregateWindow(every: $__interval, fn: mean)\n",
+          "refId": "A"
+        }
+      ],
+      "title": "Solarthermie Pumpenleistung",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_SYNOLOGY}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "displayName": "Brennerstarts",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "bool_on_off"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 23,
+        "x": 0,
+        "y": 74
+      },
+      "id": 17,
+      "options": {
+        "legend": {
+          "calcs": [
+            "sum"
+          ],
+          "displayMode": "hidden",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_SYNOLOGY}"
+          },
+          "query": "from(bucket: \"heating\")\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\n  |> filter(fn: (r) =>\n    r._measurement == \"status\" and\n    r._field == \"burner.started\"\n  )",
+          "refId": "A"
+        }
+      ],
+      "title": "Brennerstarts",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_SYNOLOGY}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "displayName": "Warmwasser Zirkulationspumpe",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "bool_on_off"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 23,
+        "x": 0,
+        "y": 77
+      },
+      "id": 8,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "hidden",
+          "placement": "right"
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_SYNOLOGY}"
+          },
+          "query": "from(bucket: \"heating\")\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\n  |> filter(fn: (r) =>\n    r._measurement == \"status\" and\n    r._field == \"heating.dhw.pumps.circulation\"\n  )",
+          "refId": "A"
+        }
+      ],
+      "title": "Warmwasser Zirkulationspumpe",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_SYNOLOGY}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "displayName": "Warmwasser Speicherladepumpe",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "bool_on_off"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 23,
+        "x": 0,
+        "y": 80
+      },
+      "id": 12,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "hidden",
+          "placement": "right"
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_SYNOLOGY}"
+          },
+          "query": "from(bucket: \"heating\")\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\n  |> filter(fn: (r) =>\n    r._measurement == \"status\" and\n    r._field == \"heating.dhw.pumps.primary\"\n  )",
+          "refId": "A"
+        }
+      ],
+      "title": "Warmwasser Speicherladepumpe",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_SYNOLOGY}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "displayName": "Heizkreis Umwälzpumpe",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "bool_on_off"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 23,
+        "x": 0,
+        "y": 83
+      },
+      "id": 11,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "hidden",
+          "placement": "right"
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_SYNOLOGY}"
+          },
+          "query": "from(bucket: \"heating\")\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\n  |> filter(fn: (r) =>\n    r._measurement == \"status\" and\n    r._field == \"heating.circuits.0.circulation.pump\"\n  )",
+          "refId": "A"
+        }
+      ],
+      "title": "Heizkreis Umwälzpumpe",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_SYNOLOGY}"
+      },
+      "description": "0:Normal 1:Reduziert 2:Manuell 3:Standby 4:Extern 5:Komfort 6:Eco 7:Fixed 8:Urlaub 9:Urlaub zu Hause 10:forcedLastFromSchedule",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "decimals": 0,
+          "displayName": "0:Normal 1:Reduziert 2:Manuell 3:Standby 4:Extern 5:Komfort 6:Eco 7:Fixed 8:Urlaub 9:Urlaub zu Hause 10:forcedLastFromSchedule",
+          "mappings": [],
+          "max": 10,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 23,
+        "x": 0,
+        "y": 86
+      },
+      "id": 13,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_SYNOLOGY}"
+          },
+          "query": "from(bucket: \"heating\")\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\n  |> filter(fn: (r) =>\n    r._measurement == \"status\" and\n    r._field == \"heating.circuits.0.operating.programs.active.num\"\n  )",
+          "refId": "A"
+        }
+      ],
+      "title": "Betriebsprogramm",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_SYNOLOGY}"
+      },
+      "description": "0:Heizung & Warmwasser  1:Nur Heizung  2:Nur Warmwasser  3:Manuell Reduziert  4:Manuell Normal",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "decimals": 0,
+          "displayName": "0:Heizung & Warmwasser  1:Nur Heizung  2:Nur Warmwasser  3:Manuell Reduziert  4:Manuell Normal",
+          "mappings": [],
+          "max": 10,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 23,
+        "x": 0,
+        "y": 90
+      },
+      "id": 14,
+      "options": {
+        "legend": {
+          "calcs": [
+            "sum"
+          ],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_SYNOLOGY}"
+          },
+          "query": "from(bucket: \"heating\")\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\n  |> filter(fn: (r) =>\n    r._measurement == \"status\" and\n    r._field == \"heating.circuits.0.operating.modes.active.num\"\n  )",
+          "refId": "A"
+        }
+      ],
+      "title": "Betriebsmodus",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_SYNOLOGY}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "displayName": "Warmwasser Aktiv",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "bool_on_off"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 23,
+        "x": 0,
+        "y": 94
+      },
+      "id": 10,
+      "options": {
+        "legend": {
+          "calcs": [
+            "sum"
+          ],
+          "displayMode": "hidden",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_SYNOLOGY}"
+          },
+          "query": "from(bucket: \"heating\")\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\n  |> filter(fn: (r) =>\n    r._measurement == \"status\" and\n    r._field == \"heating.dhw.charging\"\n  )",
+          "refId": "A"
+        }
+      ],
+      "title": "Warmwasser Aktiv",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_SYNOLOGY}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "displayName": "Warmwasser Status",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "bool_on_off"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 23,
+        "x": 0,
+        "y": 97
+      },
+      "id": 9,
+      "options": {
+        "legend": {
+          "calcs": [
+            "sum"
+          ],
+          "displayMode": "hidden",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_SYNOLOGY}"
+          },
+          "query": "from(bucket: \"heating\")\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\n  |> filter(fn: (r) =>\n    r._measurement == \"status\" and\n    r._field == \"heating.dhw\"\n  )",
+          "refId": "A"
+        }
+      ],
+      "title": "Warmwasser Status",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_SYNOLOGY}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "displayName": "Frostschutz",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "bool_on_off"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 23,
+        "x": 0,
+        "y": 100
+      },
+      "id": 7,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "hidden",
+          "placement": "right"
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_SYNOLOGY}"
+          },
+          "query": "from(bucket: \"heating\")\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\n  |> filter(fn: (r) =>\n    r._measurement == \"status\" and\n    r._field == \"heating.circuits.0.frostprotection\"\n  )",
+          "refId": "A"
+        }
+      ],
+      "title": "Frostschutz",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_SYNOLOGY}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "displayName": "Verbrauch Pellets",
+          "mappings": [],
+          "noValue": "Keine Daten im Zeitraum",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              }
+            ]
+          },
+          "unit": "masskg"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 23,
+        "x": 0,
+        "y": 103
+      },
+      "id": 6,
+      "options": {
+        "legend": {
+          "calcs": [
+            "sum"
+          ],
+          "displayMode": "hidden",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_SYNOLOGY}"
+          },
+          "query": "import \"interpolate\"\nfrom(bucket: \"heating\")\n  |> range(start: v.timeRangeStart, stop:v.timeRangeStop)\n  |> filter(fn: (r) =>\n    r._measurement == \"misc\" and\n    r._field == \"pellets.consumption\"\n  )\n  |> interpolate.linear(every: 1d)\n  |> difference()\n  |> aggregateWindow(every: 1d, fn: sum)\n",
+          "refId": "A"
+        }
+      ],
+      "title": "Tagesverbrauch Pellets",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 106
+      },
+      "id": 70,
+      "panels": [],
+      "title": "Sonstige Informationen",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_SYNOLOGY}"
+      },
+      "description": "kg/Jahr ist hochgerechnet aus kg/Tag*365\n\nAllgemein geht man bei einer Wohnfläche von 250 m² von folgendem Holzpellets Verbrauch aus:\n* Altbauten bis 1977 verbrauchen 40kg/m²a Pellets. Im Jahr also 10.000 kg\n* Bauten bis 2003 verbrauchen 20 kg/m²a Pellets. Im Jahr also nur 5.000 kg\n* Ein KfW Effizienzhaus verbraucht 12 kg/m²a Pellets. Im Jahr also nur noch 3.000 kg\n* Ein Passivhaus hat einen Pelletverbrauch von 3 kg/m²a Pellets. Im Jahr also nur 750 kg",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "light-green",
+            "mode": "fixed"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "color-text",
+            "filterable": false,
+            "inspect": false,
+            "minWidth": 95
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Füllung"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "kg"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Rest"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "kg"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Preis"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "€"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "pro Kg"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "€"
+              },
+              {
+                "id": "decimals",
+                "value": 2
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/kg.*/"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "kg"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 23,
+        "x": 0,
+        "y": 107
+      },
+      "id": 45,
+      "options": {
+        "footer": {
+          "fields": [],
+          "reducer": [
+            "mean"
+          ],
+          "show": false
+        },
+        "showHeader": true
+      },
+      "pluginVersion": "8.5.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_SYNOLOGY}"
+          },
+          "query": "import \"contrib/tomhollingworth/events\"\n// Define a helper function to extract field values\ngetFieldValue = (tables=<-, value=\"_value\", field) => {\n    extract = tables\n        |> findColumn(fn: (key) => key._field == field, column: value)\n\n    return extract[0]\n}\n\nstarttime = -5y\nlastFillTime =\n    from(bucket: \"heating\")\n        |> range(start: starttime, stop: now())\n        |> filter(fn: (r) => r._measurement == \"pelletsfills\" and r._field == \"kg\")\n        |> last()\n        |> getFieldValue(value: \"_time\", field: \"kg\")\n\nconsumedPelletsSinceLastFill = from(bucket: \"heating\")\n  |> range(start: lastFillTime, stop: now())\n  |> filter(fn: (r) => r._measurement == \"misc\" and r._field == \"pellets.consumption\" )\n  |> difference()\n  |> sum()\n  |> getFieldValue(field: \"pellets.consumption\")\n\nkg =\n    from(bucket: \"heating\")\n        |> range(start: starttime, stop: now())\n        |> filter(fn: (r) => r._measurement == \"pelletsfills\" and r._field == \"kg\")\n\nrestKg =\n    from(bucket: \"heating\")\n        |> range(start: starttime, stop: now())\n        |> filter(fn: (r) => r._measurement == \"pelletsfills\" and r._field == \"restKg\")\n\npriceTotal =\n    from(bucket: \"heating\")\n        |> range(start: starttime, stop: now())\n        |> filter(fn: (r) => r._measurement == \"pelletsfills\" and r._field == \"priceTotal\")\n\nj1 = join(tables: {t1: kg, t2: priceTotal}, on: [\"_time\"])\n    |> map(fn: (r) => ({r with \n        kg: r._value_t1, \n        priceTotal: r._value_t2,\n        priceKg: r._value_t2 / r._value_t1\n    }))\n  |> keep(columns: [\"kg\", \"priceTotal\", \"priceKg\", \"_time\"])\n\njoin(tables: {t1: j1, t2: restKg}, on: [\"_time\"])\n    |> map(fn: (r) => ({r with \n        restKg: if (r._time == lastFillTime) then r.kg-consumedPelletsSinceLastFill else r._value\n    }))\n    |> events.duration(unit: 1d, columnName: \"days\")\n    |> events.duration(unit: 1mo, columnName: \"months\")\n    |> map(fn: (r) => ({r with \n        kgPerDay: (r.kg-r.restKg) / float(v: r.days),\n        kgPerMonth: if (r.months == 0.0) then 0.0 else (r.kg-r.restKg) / float(v: r.months),\n        kgPerYear: ((r.kg-r.restKg) / float(v: r.days)) * 365.0,\n        consumedPelletsSinceLastFill: consumedPelletsSinceLastFill\n    }))\n    |> keep(columns: [\"kg\", \"priceTotal\", \"priceKg\", \"restKg\", \"days\", \"months\", \"kgPerDay\", \"kgPerMonth\", \"kgPerYear\", \"_time\"])\n",
+          "refId": "A"
+        }
+      ],
+      "title": "Pellets Füllungen & historische Verbrauchswerte",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "restKg": false
+            },
+            "indexByName": {
+              "_time": 0,
+              "days": 5,
+              "kg": 1,
+              "kgPerDay": 6,
+              "kgPerMonth": 8,
+              "months": 7,
+              "priceKg": 4,
+              "priceTotal": 3,
+              "restKg": 2
+            },
+            "renameByName": {
+              "_time": "Datum",
+              "days": "Tage",
+              "duration": "Tage",
+              "kg": "Füllung",
+              "kgPerDay": "kg/Tag",
+              "kgPerMonth": "kg/Monat",
+              "kgPerYear": "kg/Jahr",
+              "months": "Monate",
+              "priceKg": "pro Kg",
+              "priceTotal": "Preis",
+              "restKg": "Rest"
+            }
+          }
+        },
+        {
+          "id": "sortBy",
+          "options": {
+            "fields": {},
+            "sort": [
+              {
+                "desc": true,
+                "field": "Datum"
+              }
+            ]
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_SYNOLOGY}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "dark-blue",
+            "mode": "fixed"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "Stunden"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Brennerstunden"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "none"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Brennerstarts"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "none"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 9,
+        "x": 0,
+        "y": 115
+      },
+      "id": 35,
+      "maxDataPoints": 1,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/.*/",
+          "values": false
+        },
+        "textMode": "value_and_name"
+      },
+      "pluginVersion": "8.5.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_SYNOLOGY}"
+          },
+          "query": "import \"experimental\"\n\nstarttime = experimental.addDuration(d: -5m, to: now())\nhours =\n    from(bucket: \"heating\")\n        |> range(start: starttime, stop: now())\n        |> filter(fn: (r) => r._measurement == \"misc\" and r._field == \"heating.burners.0.statistics.hours\")\n        |> drop(columns: [\"_start\", \"_stop\"])\n        |> last()\n\nstarts =\n    from(bucket: \"heating\")\n        |> range(start: starttime, stop: now())\n        |> filter(fn: (r) => r._measurement == \"misc\" and r._field == \"heating.burners.0.statistics.starts\")\n        |> drop(columns: [\"_start\", \"_stop\"])\n        |> last()\n\njoin(tables: {t1: starts, t2: hours}, on: [\"_time\"])\n    |> map(fn: (r) => ({r with \n        starts: r._value_t1, \n        hours: r._value_t2,\n        hoursPerStart: r._value_t2 / r._value_t1\n    }))\n    |> keep(columns: [\"starts\", \"hours\", \"hoursPerStart\"])\n    \n",
+          "refId": "A"
+        }
+      ],
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {},
+            "indexByName": {
+              "hours": 0,
+              "hoursPerStart": 2,
+              "starts": 1
+            },
+            "renameByName": {
+              "hours": "Brennerstunden",
+              "hoursPerStart": "pro Start",
+              "starts": "Brennerstarts"
+            }
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_SYNOLOGY}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Betriebsstunden Ost"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "semi-dark-purple",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "displayName",
+                "value": "Ost"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Betriebsstunden West"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "light-purple",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "displayName",
+                "value": "West"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 5,
+        "x": 9,
+        "y": 115
+      },
+      "id": 53,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.5.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_SYNOLOGY}"
+          },
+          "query": "from(bucket: \"solar\")\n  |> range(start: -1h, stop:now())\n  |> filter(fn: (r) =>\n    r._measurement == \"misc\" \n    and r._field =~ /Betriebsstunden.*/\n  )\n  |> last()",
+          "refId": "A"
+        }
+      ],
+      "title": "Solarthermie Betriebstunden",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_SYNOLOGY}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto",
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "Tage"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 9,
+        "x": 0,
+        "y": 118
+      },
+      "id": 76,
+      "options": {
+        "footer": {
+          "fields": [
+            "days"
+          ],
+          "reducer": [
+            "mean"
+          ],
+          "show": true
+        },
+        "showHeader": true
+      },
+      "pluginVersion": "8.5.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_SYNOLOGY}"
+          },
+          "query": "import \"date\"\nimport \"contrib/tomhollingworth/events\"\n\n// Define a helper function to return a formatted date\ndateString = (year=false, v) => {\n  d = string(v: date.monthDay(t: v))\n  m = string(v: date.month(t: v))\n  dm = d + \".\" + m + \".\"\n  //s = s + if s == true then \".\" + string(v: date.year(t: v)) else \"\"\n  y = if year then string(v: date.year(t: v)) else \"\"\n  s = dm + y\n  return s\n}\n\nfrom(bucket: \"heating\")\n  |> range(start: -2y, stop:now())\n  |> filter(fn: (r) =>\n    r._measurement == \"ashtrayempty\" \n    //and r._field == \"example-field\"\n  )\n  |> events.duration(unit: 1d, columnName: \"days\")\n  |> map(fn: (r) => ({r with \n        Datum: dateString(v: r._time, year: true)\n    }))\n  |> drop(columns: [\"_start\", \"_stop\"])\n",
+          "refId": "A"
+        }
+      ],
+      "title": "Ascheschublade Leerungen",
+      "transformations": [
+        {
+          "id": "sortBy",
+          "options": {
+            "fields": {},
+            "sort": [
+              {
+                "desc": true,
+                "field": "_time"
+              }
+            ]
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "_time": true,
+              "_value percentfull": true,
+              "percentfull": true
+            },
+            "indexByName": {},
+            "renameByName": {
+              "Datum percentfull": "Leerung am",
+              "_time": "",
+              "days percentfull": "Seit voriger Leerung"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_SYNOLOGY}"
+      },
+      "description": "",
+      "gridPos": {
+        "h": 12,
+        "w": 11,
+        "x": 0,
+        "y": 127
+      },
+      "id": 19,
+      "options": {
+        "content": "## Heizung Zum Lauchwald 15\n[Admin](http://192.168.1.142:1880/ui/#!/1)\n## Vitoligno 300-P Viessmann\n- Kessel - Nennwärmeleistung  Pn 8 - 24 kW | Feuerungs-Nennwärmeleistung Qn 8,8 - 26.4 KW\n- Kesselklasse 3 | V 100l | PMS 3 bar | TN 95° | Seriennummer: 7452178101116109\n\n## Speicher Sonnenkraft PSR1000\n- **Heizwasser** Inhalt: 1000l | zul. Betriebstemperatur: 95 °C | zul. Betriebsüberdruck: 3 bar |\nSeriennummer: 8602 | Erstelldatum: 10/2011\n- **Solarregister**\nOberfläche: 3,0 m2 | zul. Betriebstemperatur: 110 °C | zul. Betriebsüberdruck: 10 bar",
+        "mode": "markdown"
+      },
+      "pluginVersion": "v1.0",
+      "type": "text"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_SYNOLOGY}"
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 11,
+        "x": 0,
+        "y": 139
+      },
+      "id": 40,
+      "links": [],
+      "options": {
+        "content": "[Admin](http://192.168.1.142:1880/ui/#!/1)",
+        "mode": "markdown"
+      },
+      "pluginVersion": "v1.0",
+      "title": " ",
+      "type": "text"
+    }
+  ],
+  "refresh": "1m",
+  "schemaVersion": 36,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now/d",
+    "to": "now"
+  },
+  "timepicker": {
+    "refresh_intervals": [
+      "5s",
+      "10s",
+      "30s",
+      "1m",
+      "5m",
+      "15m",
+      "30m",
+      "1h",
+      "2h",
+      "1d"
+    ]
+  },
+  "timezone": "",
+  "title": "Heizung",
+  "uid": "e40N-cU7z",
+  "version": 280,
+  "weekStart": ""
+}
