@@ -3,6 +3,7 @@
 ## HeizungsDashboard
 Retrieves heating and Solarthermie data from InfluxDB and displays them both in an integrated heating dashboard.
 The specific example is configured for a Vitoligno Pellets heating but it should be possible to adjust to other heatings.
+The data is fetched using a Node Red flow (see sister directory)
 ![image](https://user-images.githubusercontent.com/13353725/180777441-39321a97-49d0-4643-a4c5-829befc5e2f2.png)
 ![image](https://user-images.githubusercontent.com/13353725/180777591-e3c4b1a8-397f-40c9-917e-6ac83ea4b0ff.png)
 ![image](https://user-images.githubusercontent.com/13353725/180777719-602039d8-6b20-4748-896d-7324b9dd4038.png)
@@ -14,4 +15,5 @@ The specific example is configured for a Vitoligno Pellets heating but it should
 
 ## PhotovoltaikDashboard
 Retrieves PV data from InfluxDB and displays it an integrated heating dashboard.
+The data is fetched using a Node Red flow (see sister directory)
 ![image](https://user-images.githubusercontent.com/13353725/180774991-a96eb650-9576-4eaa-a2c3-5dacfac95d37.png)
