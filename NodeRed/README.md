@@ -39,4 +39,5 @@ The flow  includes email notification upon API failures.
 For starters you will have to enter your IP adresses in the **http GET: WR1**  **http GET: WR2** nodes.
 
 Uses an Influx bucket "pv"
+![image](https://user-images.githubusercontent.com/13353725/180775201-5f368d1a-8a55-43d7-98b7-e6abaa7e47ea.png)
 
