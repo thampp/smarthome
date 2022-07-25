@@ -33,6 +33,8 @@ Uses the Fronium Symo APIs to fetch PV information and publish it to
 - A NodeRed Dashboard (deprecated - using Influx-Grafana now)
 
 Our house has 2 Wechselrichter so it's a bit more complex. 
+The 2nd (lower) one pushes its metrics to flow variables which are then integrated with the metrics from the 1st one.
+The 2nd one also tends to show API problems so it' monitored for errors.
 
 The flow  includes email notification upon API failures.
 
